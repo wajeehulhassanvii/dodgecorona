@@ -1,0 +1,3 @@
+flutter_native_splash:
+  image: assets/images/corona_splash_screen_image.png
+  color: "#424242"

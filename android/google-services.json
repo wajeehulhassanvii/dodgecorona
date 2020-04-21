@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "901437361712",
+    "firebase_url": "https://dc-2020-e39e4.firebaseio.com",
+    "project_id": "dc-2020-e39e4",
+    "storage_bucket": "dc-2020-e39e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901437361712:android:f4800c2c82a5f75531a7f5",
+        "android_client_info": {
+          "package_name": "com.wajeehulhassan.dodgecorona"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901437361712-q1morar37rnt2481das9ekllr4v0ev00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhxKJiSemPnI9LnUrALC8H79q4_cJ49bA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901437361712-q1morar37rnt2481das9ekllr4v0ev00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
