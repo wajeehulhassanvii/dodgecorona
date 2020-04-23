@@ -1549,7 +1549,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
       } else {
         _showNotificationWithSound(
             'dodge corona app is not running in the background',
-            'to help you find bad interaction, plz turn on map');
+            'to help you find bad interaction, keep map turned on');
       }
     }
     if (state == AppLifecycleState.detached) {

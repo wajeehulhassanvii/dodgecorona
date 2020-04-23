@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:getflutter/getflutter.dart';
+import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:trackcorona/presentation/screens/login_page.dart';
 import 'package:trackcorona/presentation/screens/success_screen.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
@@ -19,6 +22,7 @@ class RegistrationPageFormBloc extends FormBloc<String, String> {
     firstNameTextField.close();
     passwordField.close();
     phoneNumberField.close();
+    repeatPasswordField.close();
   }
 
   final emailField = TextFieldBloc(
@@ -48,6 +52,9 @@ class RegistrationPageFormBloc extends FormBloc<String, String> {
           'Password requires at least 1 each [a-z] [A-Z] [0-9] and [!-*]')
     ],
   );
+  final repeatPasswordField = TextFieldBloc(
+    validators: [Validators.required('please confirm the password')],
+  );
   final phoneNumberField = TextFieldBloc(
     validators: [
       Validators.maxLength(15, 'Less than 15 characters allowed'),
@@ -58,20 +65,35 @@ class RegistrationPageFormBloc extends FormBloc<String, String> {
     ],
   );
 
+  Validator<String> _confirmPassword(
+      TextFieldBloc passwordTextFieldBloc
+      ){
+    return (String confirmPassword){
+      if (confirmPassword == passwordTextFieldBloc.value){
+        return null;
+      }
+      return "Both password must match, check again";
+    };
+  }
+
   RegistrationPageFormBloc() {
     addFieldBlocs(fieldBlocs: [
       firstNameTextField,
       lastNameTextField,
       emailField,
       passwordField,
-      phoneNumberField
+      phoneNumberField,
+      repeatPasswordField,
     ]);
+    repeatPasswordField.addValidators([_confirmPassword(passwordField)]);
+    repeatPasswordField.subscribeToFieldBlocs([passwordField]);
   }
 
   void addErrors() {}
 
   @override
   void onSubmitting() async {
+
     Response response;
     Map<String, dynamic> decodedJsonData;
 
@@ -174,7 +196,7 @@ class RegistrationPage extends StatelessWidget {
                 ),
               ),
               body: Container(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: EdgeInsets.symmetric(vertical: 5),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
                     Colors.blue,
@@ -182,10 +204,10 @@ class RegistrationPage extends StatelessWidget {
                   ], begin: Alignment.topCenter),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: 40,
+                      height: 30,
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(40, 10, 20, 0),
@@ -246,50 +268,106 @@ class RegistrationPage extends StatelessWidget {
                           padding: EdgeInsets.all(24.0),
                           child: Column(
                             children: <Widget>[
-                              TextFieldBlocBuilder(
-                                cursorColor: Colors.white54,
-                                textFieldBloc:
-                                    registrationPageBloc.firstNameTextField,
-                                decoration: InputDecoration(
-                                    labelText: 'first name ',
-                                    labelStyle: TextStyle(color: Colors.white54),
-                                    prefixIcon: Icon(Icons.assignment_ind, color: Colors.white54,)),
+                              Container(
+                                width: 300,
+                                height: 60,
+                                child: TextFieldBlocBuilder(
+                                  cursorColor: Colors.white54,
+                                  textFieldBloc:
+                                      registrationPageBloc.firstNameTextField,
+                                  decoration: InputDecoration(
+                                      labelText: 'first name ',
+                                      labelStyle: TextStyle(fontSize: 13, color: Colors.white54),
+                                      prefixIcon: Icon(Icons.assignment_ind, color: Colors.white54,)),
+                                ),
                               ),
-                              TextFieldBlocBuilder(
-                                cursorColor: Colors.white54,
-                                textFieldBloc:
-                                    registrationPageBloc.lastNameTextField,
-                                decoration: InputDecoration(
-                                    labelText: 'last name ',
-                                    labelStyle: TextStyle(color: Colors.white54),
-                                    prefixIcon: Icon(Icons.assignment_ind,color: Colors.white54,)),
+                              Container(
+                                width: 300,
+                                height: 60,
+                                child: TextFieldBlocBuilder(
+                                  cursorColor: Colors.white54,
+                                  textFieldBloc:
+                                      registrationPageBloc.lastNameTextField,
+                                  decoration: InputDecoration(
+                                      labelText: 'last name ',
+                                      labelStyle: TextStyle(color: Colors.white54, fontSize: 13),
+                                      prefixIcon: Icon(Icons.assignment_ind,color: Colors.white54,)),
+                                ),
                               ),
-                              TextFieldBlocBuilder(
-                                cursorColor: Colors.white54,
-                                textFieldBloc:
-                                    registrationPageBloc.phoneNumberField,
-                                decoration: InputDecoration(
-                                    labelText: 'phone number (intl format +)',
-                                    labelStyle: TextStyle(color: Colors.white54),
-                                    prefixIcon: Icon(Icons.phone, color: Colors.white54,)),
+                              Container(
+                                width: 300,
+                                height: 60,
+                                child: TextFieldBlocBuilder(
+                                  cursorColor: Colors.white54,
+                                  textFieldBloc:
+                                      registrationPageBloc.phoneNumberField,
+                                  decoration: InputDecoration(
+                                      labelText: 'phone number (intl format +)',
+                                      labelStyle: TextStyle(color: Colors.white54, fontSize: 13),
+                                      prefixIcon: Icon(Icons.phone, color: Colors.white54,)),
+                                ),
                               ),
-                              TextFieldBlocBuilder(
-                                cursorColor: Colors.white54,
-                                textFieldBloc: registrationPageBloc.emailField,
-                                decoration: InputDecoration(
-                                    labelText: 'email field',
-                                    labelStyle: TextStyle(color: Colors.white54),
-                                    prefixIcon: Icon(Icons.email, color: Colors.white54,)),
+                              Container(
+                                width: 300,
+                                height: 60,
+                                child: TextFieldBlocBuilder(
+                                  cursorColor: Colors.white54,
+                                  textFieldBloc: registrationPageBloc.emailField,
+                                  decoration: InputDecoration(
+                                      labelText: 'email field',
+                                      labelStyle: TextStyle(color: Colors.white54, fontSize: 13),
+                                      prefixIcon: Icon(Icons.email, color: Colors.white54,)),
+                                ),
                               ),
-                              TextFieldBlocBuilder(
-                                cursorColor: Colors.white54,
-                                textFieldBloc:
-                                    registrationPageBloc.passwordField,
-                                suffixButton: SuffixButton.obscureText,
-                                decoration: InputDecoration(
-                                    labelText: 'password ',
-                                    labelStyle: TextStyle(color: Colors.white54),
-                                    prefixIcon: Icon(Icons.lock, color: Colors.white54,)),
+                              Container(
+                                width: 300,
+                                height: 60,
+                                child: TextFieldBlocBuilder(
+                                  cursorColor: Colors.white54,
+                                  textFieldBloc:
+                                      registrationPageBloc.passwordField,
+                                  suffixButton: SuffixButton.obscureText,
+                                  decoration: InputDecoration(
+
+                                      labelText: 'password ',
+                                      labelStyle: TextStyle(color: Colors.white54, fontSize: 13),
+                                      prefixIcon: Icon(Icons.lock, color: Colors.white54,)),
+                                ),
+                              ),
+                              Container(
+                                width: 300,
+                                height: 60,
+                                child: TextFieldBlocBuilder(
+                                  cursorColor: Colors.white54,
+                                  textFieldBloc:
+                                  registrationPageBloc.repeatPasswordField,
+                                  suffixButton: SuffixButton.obscureText,
+                                  decoration: InputDecoration(
+                                      labelText: 'repeat password ',
+                                      labelStyle: TextStyle(color: Colors.white54, fontSize: 13),
+                                      prefixIcon: Icon(Icons.lock, color: Colors.white54,)),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+//                                  GFButton(text: 'back to login',
+//                                      color: Colors.white70,
+//                                      icon: Icon(LineAwesomeIcons.backward, color: Colors.white70,),
+//                                      type: GFButtonType.outline,
+//                                      onPressed: (){
+//                                        Get.offAll(LoginPage());
+//                                  }),
+//                                  SizedBox(width: 50,),
+//                                  GFButton(text: 'submit',
+//                                      icon: Icon(LineAwesomeIcons.send, color: Colors.white70,),
+//                                      type: GFButtonType.outline,
+//                                      color: Colors.white70,
+//                                      onPressed: (){
+//                                        registrationPageBloc.submit;
+//                                      }),
+                                ],
                               ),
                             ],
                           ),

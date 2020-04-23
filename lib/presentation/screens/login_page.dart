@@ -219,25 +219,34 @@ class LoginPage extends StatelessWidget {
                           padding: EdgeInsets.all(24.0),
                           child: Column(
                             children: <Widget>[
-                              TextFieldBlocBuilder(
+                              Container(
+                                width: 300,
+                                height: 60,
+                                child: TextFieldBlocBuilder(
 
-                                cursorColor: Colors.white70,
-                                textFieldBloc: loginPageBloc.emailField,
-                                decoration: InputDecoration(
+                                  cursorColor: Colors.white70,
+                                  textFieldBloc: loginPageBloc.emailField,
+                                  decoration: InputDecoration(
 
-                                    labelText: 'email ',
-                                    labelStyle: TextStyle(color: Colors.white70),
-                                    prefixIcon: Icon(Icons.email, color: Colors.white70,)),
+                                      labelText: 'email ',
+                                      labelStyle: TextStyle(color: Colors.white70, fontSize: 13),
+                                      prefixIcon: Icon(Icons.email, color: Colors.white70,
+                                      size: 20,)),
+                                ),
                               ),
-                              TextFieldBlocBuilder(
-                                cursorColor: Colors.white70,
-                                textFieldBloc:
-                                    loginPageBloc.passwordField,
-                                suffixButton: SuffixButton.obscureText,
-                                decoration: InputDecoration(
-                                    labelText: 'password ',
-                                    labelStyle: TextStyle(color: Colors.white70),
-                                    prefixIcon: Icon(Icons.lock, color: Colors.white70,)),
+                              Container(
+                                width: 300,
+                                height: 60,
+                                child: TextFieldBlocBuilder(
+                                  cursorColor: Colors.white70,
+                                  textFieldBloc:
+                                      loginPageBloc.passwordField,
+                                  suffixButton: SuffixButton.obscureText,
+                                  decoration: InputDecoration(
+                                      labelText: 'password ',
+                                      labelStyle: TextStyle(color: Colors.white70, fontSize: 13),
+                                      prefixIcon: Icon(Icons.lock, color: Colors.white70,)),
+                                ),
                               ),
 //                              Padding(
 //                                padding: EdgeInsets.only(left: 0),

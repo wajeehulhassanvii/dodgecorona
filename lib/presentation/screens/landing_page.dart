@@ -70,7 +70,8 @@ class LandingPage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 44,
                             color: Colors.white,
-                            fontFamily: 'Alegreya'),
+                            fontFamily: 'Alegreya'
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -83,7 +84,8 @@ class LandingPage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,
-                            fontFamily: 'Alegreya'),
+                            fontFamily: 'Alegreya'
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -225,8 +227,60 @@ class LandingPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Text('ADD MORE INFORMATION BELOW ON GLOSS',
-                      style: TextStyle(fontSize: 200),),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Text('MORE DETAILED INFORMATION BELOW',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(fontSize: 100, color: Colors.white70),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 30, 10),
+                      child: Text('This application has not been designed for in house use.'
+                          ' \nThe accuracy of this application is dependant on the accuracy of GPS,'
+                          ' but it is still good enough to tackle the issue.\nThis application requires'
+                          ' push notification to be enabled in order to get the notification from the'
+                          ' other person who marked themselves infected of with symptoms.\n'
+                          'The information will not be shared with any organization at any cost.\n'
+                          'For any future changes please keep visiting this website.\n',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Text('HOW DOES IT WORK?',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(fontSize: 50, color: Colors.white70),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 30, 10),
+                      child: Text('Step 1:\n'
+                          'Download the app and ask friends and family to download it as well.\n'
+                          '\nStep 2:\n'
+                          'Turn on GPS, which is usually on.\n'
+                          '\nStep 3:\n'
+                          'Turn on map from the application, and keep it turned on.'
+                          '\n\nStep 4:\n'
+                          'You\'ll get notified from us if you came in contact with any person with'
+                          'symptoms of COVID-19 infection.'
+                          '\n\nStep 5:\n'
+                          'You can also notify others if by selecting symptoms or infected option if'
+                          'you came in contact with a potential pathogen.'
+                          '\n\nStep 6:\n'
+                          'You can status from the app to different social media or friends and family'
+                          'as well to make them aware of COVID-19..',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      ),
+                    ),
+
+                    Text('Thank you',
+                      style: TextStyle(fontSize: 15, color: Colors.white70),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               )
