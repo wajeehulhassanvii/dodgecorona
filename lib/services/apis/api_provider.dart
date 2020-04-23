@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:trackcorona/presentation/models/access_token/access_token.dart';
+import 'package:trackcorona/services/injector/injector.dart';
 import 'package:trackcorona/services/shared_preference_manager.dart';
 import 'package:trackcorona/utilities/constants.dart';
 
@@ -34,7 +36,7 @@ class ApiProvider {
     dio.interceptors.requestLock;
     if (_accessToken != null) {
       log('-----------inside _accessToken != null -----------');
-      log(_accessToken);
+      log("_accessToken inside _accessToken != null: $_accessToken");
       dio.interceptors.add(InterceptorsWrapper(
         onRequest: (RequestOptions options) async {
           await addAccessTokenToHeader(options, _accessToken);
@@ -61,21 +63,22 @@ class ApiProvider {
 
     RequestOptions refreshOptions = error.response.request;
 
-    SharedPreferencesManager sharedPreferenceManager =
-        await SharedPreferencesManager.getInstance();
+//    SharedPreferencesManager sharedPreferenceManager =
+//        await SharedPreferencesManager.getInstance();
+
+    getIt = GetIt.instance;
+    SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
 
     if(sharedPreferenceManager!=null){
-      log('shared preference getting refresh token');}
+      log('shared preference loaded in _refreshToken method');}
 
     var _refreshToken = sharedPreferenceManager.getString('refresh_token');
     var _accessToken = sharedPreferenceManager.getString('access_token');
 
     log('----------------- refresh token ----------------');
 //    log(_refreshToken.runtimeType.toString());
-    log('_accessToken: $_accessToken');
-    log('_refreshToken: $_refreshToken');
-
-//    await sharedPreferenceManager.clearKey("access_token");
+    log('_accessToken in refreshToken: $_accessToken');
+    log('_refreshToken in refreshToken: $_refreshToken');
 
 
     String refreshToken = "Bearer " + _refreshToken;

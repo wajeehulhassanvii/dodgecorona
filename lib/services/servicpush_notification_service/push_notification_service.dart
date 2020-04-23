@@ -1,10 +1,17 @@
 
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get_it/get_it.dart';
+import 'package:trackcorona/services/apis/api_provider.dart';
+import 'package:trackcorona/services/injector/injector.dart';
+import 'package:trackcorona/services/shared_preference_manager.dart';
 
 class PushNotificationService {
+  static String fcmTokenKey = "fcm_token";
   final FirebaseMessaging _fcm = FirebaseMessaging();
 
   Future initialise() async {
@@ -40,19 +47,122 @@ class PushNotificationService {
 
     log('inside initialize after configure');
 
-    _saveDeviceToken();
+    // just check the token
+    String fcmToken = await _fcm.getToken();
+    log('>>>>>>>>>>>>> fcmToken checking $fcmToken');
+
+
+    _fcm.onTokenRefresh.listen((newToken) {
+
+      // TODO Save newToken and also save in shared preference
+//      Yes, as a workaround, you have to store the old token in sharedPreferences.
+//      Everytime you get a onTokenRefresh call, you can compare it with the one on
+//      SharedPreferences and store it only if they are different. Hope it helps
+
+      log('refresh token getting called');
+      _saveRefreshDeviceToken(newToken);
+
+//      getIt = GetIt.instance;
+//      SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
+//      sharedPreferenceManager.putString(fcmTokenKey, newToken);
+
+    });
+
 
   }
 
-  _saveDeviceToken() async {
+  static void saveDeviceToken() async {
     // TODO get the email or user_id
+    // call this method after login
+
+    getIt = GetIt.instance;
+    SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
+
+    FirebaseMessaging _fcm = FirebaseMessaging();
     String fcmToken = await _fcm.getToken();
     log('>>>>>>>>>>>>> fcmToken $fcmToken');
 
-    // TODO save token to postgresql
+    String oldFcmToken = sharedPreferenceManager.getString(fcmTokenKey);
+    sharedPreferenceManager.putString(fcmTokenKey, fcmToken);
+    
+    // TODO save token to postgresql firebase_messaging database
+    // check jwt and check if fcb_token is already present
+    Dio dio = await ApiProvider().getDioHttpClient();
+    Response response=Response();
+    try{
+    response = await dio.post('/savefcmtoken', data: jsonEncode({
+      fcmTokenKey : fcmToken,
+      "old_fcm_token": oldFcmToken
+    }));}catch(e){
+      log('exception caught at /savefcmtoken post in saveDeviceToken');
+    }
+    log(response.data.toString());
   }
 
-  Future<dynamic> _myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  static void deleteDeviceToken() async {
+    // TODO get the email or user_id
+    // call this method after login
+    FirebaseMessaging _fcm = FirebaseMessaging();
+    String fcmToken = await _fcm.getToken();
+    log('>>>>>>>>>>>>> fcmToken $fcmToken');
+
+    getIt = GetIt.instance;
+    SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
+    sharedPreferenceManager.clearKey(fcmTokenKey);
+
+    // TODO save token to postgresql firebase_messaging database
+    // check jwt and check if fcb_token is already present
+    Dio dio = await ApiProvider().getDioHttpClient();
+    Response response=Response();
+    try{
+      response = await dio.post('/deletefcmtoken', data: jsonEncode({
+        fcmTokenKey : fcmToken
+      }));}catch(e){
+      log('exception caught at /deletefcmtoken post in saveDeviceToken');
+    }
+    log(response.data.toString());
+  }
+
+
+  _saveRefreshDeviceToken(String newToken) async {
+    // TODO get the email or user_id
+    // whenever there is refresh then check jwt and login then store
+    // fcb_token in database
+
+
+    getIt = GetIt.instance;
+    SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
+
+    String newToken = await _fcm.getToken();
+
+
+    // save newToken in database
+    log('>>>>>>>>>>>>> fcmToken $newToken');
+
+    String oldFcmToken = sharedPreferenceManager.getString(fcmTokenKey);
+    sharedPreferenceManager.putString(fcmTokenKey, newToken);
+
+    // TODO save token to postgresql firebase_messaging database
+    // TODO delete old token if present and save new token
+
+    // if user is logged in with jwt
+    Dio dio = await ApiProvider().getDioHttpClient();
+
+    Response response=Response();
+    try{
+    response = await dio.post('/savefcmtoken', data: jsonEncode({
+      fcmTokenKey : newToken,
+      "old_fcm_token": oldFcmToken
+    }));} catch(e){
+      log('exception caught at /savefcmtoken post in _saveRefreshDeviceToken');
+    }
+
+    log(response.data.toString());
+
+  }
+
+
+  static Future<dynamic> _myBackgroundMessageHandler(Map<String, dynamic> message) async {
     if (message.containsKey('data')) {
       // Handle data message
       // final dynamic data = message['data'];

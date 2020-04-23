@@ -25,6 +25,7 @@ import 'package:trackcorona/bloc/map/bloc.dart';
 import 'package:trackcorona/bloc/map/maps_bloc.dart';
 import 'package:trackcorona/presentation/repositories/map_repository.dart';
 import 'package:trackcorona/presentation/screens/login_page.dart';
+import 'package:trackcorona/services/servicpush_notification_service/push_notification_service.dart';
 import 'package:trackcorona/services/shared_preference_manager.dart';
 import 'package:trackcorona/utilities/constants.dart';
 import 'package:trackcorona/utilities/person_condition_enum.dart';
@@ -351,11 +352,12 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                             });
                         print('trying to remove refresh logout');
 
+
                         if (refreshResponse.statusCode == 200 &&
                             logoutResponse.statusCode == 200) {
                           log('before clearning shared prefs');
 
-                          // we dont clear shared preference because we are only logging out
+                          // we don't clear shared preference because we are only logging out
                           // and we will need jwt to check if user is logged in
                           await sharedPreferenceManager.clearAll();
                           log('going to login screen');
@@ -365,6 +367,8 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                         decodedJsonData =
                             jsonDecode(refreshResponse.toString());
                         print(decodedJsonData['message']);
+
+
                       } catch (e) {
                         print(e);
                       }

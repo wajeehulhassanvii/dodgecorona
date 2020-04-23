@@ -20,6 +20,7 @@ const String kFacebookAppId= '3691001584283764';
 const String kAccessTokenKey = 'access_token';
 const String kRefreshTokenKey = 'refresh_token';
 const String kIsPreviousStateMarkerListFoundWithinDiameterKey = 'is_previous_state_marker_list_found_within_diameter';
+const double kMinimumSocialDistance = 1.5;
 
 // #314CCD       #4264FB     #D7E0FF         #EDF0EF
 

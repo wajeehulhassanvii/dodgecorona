@@ -9,6 +9,7 @@ import 'package:trackcorona/presentation/screens/about_page.dart';
 import 'package:trackcorona/presentation/screens/map_page.dart';
 import 'package:trackcorona/presentation/screens/registration_page.dart';
 import 'package:trackcorona/services/apis/api_provider.dart';
+import 'package:trackcorona/services/servicpush_notification_service/push_notification_service.dart';
 import 'package:trackcorona/services/shared_preference_manager.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
 import 'package:trackcorona/utilities/loading_dialog.dart';
@@ -72,6 +73,8 @@ class LoginPageFormBloc extends FormBloc<String, String> {
 
         decodedJsonData=jsonDecode(response.toString());
         print(decodedJsonData);
+
+        PushNotificationService.saveDeviceToken();
 
         // initialize getIt
         getIt = GetIt.instance;

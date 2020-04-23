@@ -7,6 +7,7 @@ import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:trackcorona/bloc/core/shape_painter.dart';
 import 'package:trackcorona/presentation/models/interacted_users/interected_users.dart';
 import 'package:trackcorona/presentation/models/my_marker_element/my_marker_element.dart';
+import 'package:trackcorona/utilities/constants.dart';
 import 'maps_state.dart';
 import 'package:trackcorona/utilities/person_condition_enum.dart';
 import './bloc.dart';
@@ -22,7 +23,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
   List<PersonCondition> personList;
   List<Marker> markerList;
 
-  double minimumSocialDistance = 2;
+  double minimumSocialDistance = kMinimumSocialDistance;
 
   @override
   MapsState get initialState => NoInitialUsers();
@@ -163,12 +164,15 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
       log('-------------------- after MarkerListFoundWithinDiameter --------------------- ');
 
       for (MyMarkerElements e in listOfMyMarkerElements) {
+
         if (Distance()(e.getLatLng(), userLocation) < minimumSocialDistance) {
+
           log('distance is ${Distance()(e.getLatLng(), userLocation)}');
           print('Distance between two LatLng');
           print(Distance()(e.getLatLng(), userLocation));
           listOfInteractedUsers.add(InteractedUsers(e.lat, e.lng, e.personId));
         } else {
+
           log('distance is more than minimumSocialDistance');
         }
       }
@@ -189,7 +193,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
       yield FailedToFindUserWithinDiameter();
     }
 
-    // TODO send email notification that health condition of the person have changed
+    // TODO send push notification that health condition of the person have changed
     //  and that if they came in contact, be more cautious,
 
     if (notifyOthers){
