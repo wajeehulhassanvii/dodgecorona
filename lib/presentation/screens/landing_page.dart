@@ -79,7 +79,7 @@ class LandingPage extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
                       child: Text(
                         'We took the challenge to bring the economy back to its foot'
-                        ', after the world got affected by COVID-19 '
+                        ', after the world got affected by variants of COVID-19 '
                         'keeping in mind your privacy, see how we can achieve it together',
                         style: TextStyle(
                             fontSize: 20,
@@ -128,29 +128,33 @@ class LandingPage extends StatelessWidget {
                         SizedBox(
                           width: 10,
                         ),
-                        GFButton(
-                            text: 'subscribe',
-                            size: GFSize.SMALL,
-                            color: Colors.white70,
-                            type: GFButtonType.outline2x,
-                            // TODO implement onPress
-                            onPressed: () async {
-                              log('inside on press');
+                        GFButton(text: 'subscribe',
+                        type: GFButtonType.outline2x,
+                        color: Colors.white70,
+                        onPressed: () async {
 
-                              Dio dio = Dio();
-                              dio.options.baseUrl = kBaseUrl_chrome;
+                          log('inside on press');
 
-                              Response response = Response();
-                              response = await dio.post("/subscribepublic",
-                                  data: jsonEncode({
-                                    "email": subscribeEmailTextFieldController
-                                        .value
-//                "rememberMe": rememberMeBooleanField.value
+                          Dio dio = Dio();
+                          dio.options.baseUrl = kBaseUrl_chrome;
+
+                          Response response = Response();
+                          response = await dio.post("/subscribepublic",
+                              data: jsonEncode({
+                                "email": "email"
+                              }),
+                              options: Options(
+                                  headers: {
+                                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                                    "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+                                    "Access-Control-Allow-Methods": "POST, OPTIONS"
                                   }));
-                              log(response.toString());
+                          log(response.toString());
 
-                              // ends here onPress
-                            }),
+                          // ends here onPress
+
+                        },),
                         SizedBox(
                           width: 20,
                         ),
@@ -236,7 +240,13 @@ class LandingPage extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 10, 30, 10),
-                      child: Text('This application has not been designed for in house use.'
+                      child: Text('This application has been designed for data sensitive people.\n'
+                          'Its perfect for people who don\'t want to share their data with with'
+                          'different organizations and private companies who sell their data for'
+                          ' generating revenue.\n'
+                          'This software has been built by an indie developer.\n'
+                          'Our mode of revenue generation is ads or donation, to keep the server running.'
+                          '\nThis application has not been designed for in house use.'
                           ' \nThe accuracy of this application is dependant on the accuracy of GPS,'
                           ' but it is still good enough to tackle the issue.\nThis application requires'
                           ' push notification to be enabled in order to get the notification from the'
