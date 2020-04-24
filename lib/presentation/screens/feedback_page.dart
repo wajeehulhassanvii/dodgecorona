@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get/get.dart';
 import 'package:getflutter/components/button/gf_button.dart';
 import 'package:getflutter/size/gf_size.dart';
@@ -15,8 +16,18 @@ import 'package:trackcorona/utilities/constants.dart';
 
 class FeedbackPage extends StatelessWidget {
   static String route = "/feedbackpage";
-  final headerTextController = TextEditingController();
-  final messageTextController = TextEditingController();
+  final _subjectTextController = TextEditingController();
+  final _nameTextController = TextEditingController();
+  final _emailTextController = TextEditingController();
+  final _messageTextController = TextEditingController();
+
+  @override
+  void dispose() {
+    _subjectTextController.dispose();
+    _nameTextController.dispose();
+    _emailTextController.dispose();
+    _messageTextController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,45 +99,90 @@ class FeedbackPage extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    height: 40,
-
-                    padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    height: 60,
+                    padding: EdgeInsets.fromLTRB(30, 5, 30, 0),
                     child: Material(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         elevation: 100,
-                        child: TextField(
-                          controller: headerTextController,
-                          decoration: InputDecoration(
-                            labelText: 'Heading'
-                          ),
-                        )
-                    ),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                          controller: _nameTextController,
+                          decoration: InputDecoration(labelText: 'name'),
+                        )),
                   ),
                   Container(
-                    height: 370,
+                    height: 60,
+                    padding: EdgeInsets.fromLTRB(30, 5, 30, 0),
+                    child: Material(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        elevation: 100,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
+                              return "please enter correct email";
+                            }
+                            return null;
+                          },
+                          controller: _emailTextController,
+                          decoration: InputDecoration(labelText: 'email'),
+                        )),
+                  ),
+                  Container(
+                    height: 80,
+                    padding: EdgeInsets.fromLTRB(30, 5, 30, 0),
+                    child: Material(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        elevation: 100,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter some text";
+                            }
+                            return null;
+                          },
+                          maxLines: 2,
+                          controller: _subjectTextController,
+                          decoration: InputDecoration(labelText: 'subject'),
+                        )),
+                  ),
+                  Container(
+                    height: 350,
                     padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
                     child: Material(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       elevation: 100,
-
-                      child: TextField(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please enter some text";
+                          }
+                          return null;
+                        },
                         maxLines: 15,
-                        controller: messageTextController,
+                        controller: _messageTextController,
                         decoration: InputDecoration(
-                            labelText: 'your message......',
+                          labelText: 'your message in 1000 letters......',
                         ),
-
-
                       ),
                     ),
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GFButton(
                           text: 'back to landing page',
-                          icon: Icon(LineAwesomeIcons.backward, color: Colors.white70,),
+                          icon: Icon(
+                            LineAwesomeIcons.backward,
+                            color: Colors.white70,
+                          ),
                           size: GFSize.SMALL,
                           color: Colors.white70,
                           type: GFButtonType.outline2x,
@@ -147,7 +203,10 @@ class FeedbackPage extends StatelessWidget {
                       ),
                       GFButton(
                           text: 'send feedback',
-                          icon: Icon(LineAwesomeIcons.send, color: Colors.white70,),
+                          icon: Icon(
+                            LineAwesomeIcons.send,
+                            color: Colors.white70,
+                          ),
                           size: GFSize.SMALL,
                           color: Colors.white70,
                           type: GFButtonType.outline2x,
@@ -161,17 +220,21 @@ class FeedbackPage extends StatelessWidget {
                             Response response = Response();
                             response = await dio.post("/feedback",
                                 data: jsonEncode({
-                                  'name': 'name',
-                                  'email': 'email',
-                                  'message': 'message',
+                                  'name': _nameTextController.text,
+                                  'email': _emailTextController.text,
+                                  'subject': _subjectTextController.text,
+                                  'message': _messageTextController.text,
                                 }),
-                            options: Options(
-                            headers: {
-                              "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                              "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                              "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-                              "Access-Control-Allow-Methods": "POST, OPTIONS"
-                            }));
+                                options: Options(headers: {
+                                  "Access-Control-Allow-Origin":
+                                      "*", // Required for CORS support to work
+                                  "Access-Control-Allow-Credentials":
+                                      true, // Required for cookies, authorization headers with HTTPS
+                                  "Access-Control-Allow-Headers":
+                                      "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+                                  "Access-Control-Allow-Methods":
+                                      "POST, OPTIONS"
+                                }));
                             log(response.toString());
 
                             // ends here onPress

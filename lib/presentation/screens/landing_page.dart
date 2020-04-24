@@ -109,7 +109,9 @@ class LandingPage extends StatelessWidget {
                             style: TextStyle(color: Colors.white),
                             controller: subscribeEmailTextFieldController,
                             validator: (value) {
-                              return validateEmailAndEmptyCheck(value);
+                              if (value.isEmpty) {
+                                return "Please enter some text";
+                              }
                               return null;
                             },
                             decoration: InputDecoration(
@@ -141,7 +143,7 @@ class LandingPage extends StatelessWidget {
                           Response response = Response();
                           response = await dio.post("/subscribepublic",
                               data: jsonEncode({
-                                "email": "email"
+                                "email": subscribeEmailTextFieldController.text
                               }),
                               options: Options(
                                   headers: {
