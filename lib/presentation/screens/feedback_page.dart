@@ -50,12 +50,18 @@ class FeedbackPage extends StatelessWidget {
           ),
           child: Stack(
             children: <Widget>[
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 2, sigmaY: 6),
+              Stack(children: <Widget>[BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 1, sigmaY: 3),
                 child: Container(
-                  color: Colors.black.withOpacity(0.6),
+                  color: Colors.blue.withOpacity(0.35),
                 ),
               ),
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 1, sigmaY: 3),
+                  child: Container(
+                    color: Colors.black.withOpacity(0.65),
+                  ),
+                ),],),
               Container(
                 height: Get.height,
                 width: Get.width,
