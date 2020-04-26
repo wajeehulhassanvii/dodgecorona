@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:trackcorona/presentation/screens/login_page.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:ui';
 
@@ -16,6 +17,8 @@ import 'package:trackcorona/utilities/constants.dart';
 
 class LandingPage extends StatelessWidget {
   static String route = "/landingpage";
+
+  final GlobalKey<FormState> _subscribeKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -109,17 +112,22 @@ class LandingPage extends StatelessWidget {
                           width: 10,
                         ),
                         Container(
-                          height: 30,
+                          height: 40,
                           width: 300,
                           child: TextFormField(
+                            key: _subscribeKey,
                             style: TextStyle(color: Colors.white),
                             controller: subscribeEmailTextFieldController,
-                            validator: (value) {
+                            validator: (String value) {
                               if (value.isEmpty) {
                                 return "Please enter some text";
                               }
+                              if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
+                                return "please enter correct email";
+                              }
                               return null;
                             },
+                            autovalidate: true,
                             decoration: InputDecoration(
                               labelStyle:
                                   TextStyle(color: Colors.white, fontSize: 11),
@@ -296,11 +304,27 @@ class LandingPage extends StatelessWidget {
                         style: TextStyle(fontSize: 30, color: Colors.white),
                       ),
                     ),
-
-                    Text('Thank you',
-                      style: TextStyle(fontSize: 15, color: Colors.white70),
-                      textAlign: TextAlign.center,
-                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                      Text('Thank you',
+                        style: TextStyle(fontSize: 15, color: Colors.white70),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(width: 30,),
+//                      FlatButton(
+//                        child: Text(
+//                          'login page',
+//                          style: TextStyle(color: Colors.white70),
+//                          textAlign: TextAlign.center,
+//                        ),
+//                        onPressed: () {
+//                          // TODO go to feedback page
+//                          Get.to(LoginPage());
+//                        },
+//                      ),
+                    ],),
                   ],
                 ),
               )

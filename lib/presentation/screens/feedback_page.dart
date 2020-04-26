@@ -21,6 +21,12 @@ class FeedbackPage extends StatelessWidget {
   final _emailTextController = TextEditingController();
   final _messageTextController = TextEditingController();
 
+
+  final GlobalKey<FormState> _subjectKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _nameKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _messageKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     _subjectTextController.dispose();
@@ -110,7 +116,9 @@ class FeedbackPage extends StatelessWidget {
                     child: Material(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         elevation: 100,
+                        key: _nameKey,
                         child: TextFormField(
+                          autovalidate: true,
                           validator: (value) {
                             if (value.isEmpty) {
                               return "Please enter some text";
@@ -124,10 +132,12 @@ class FeedbackPage extends StatelessWidget {
                   Container(
                     height: 60,
                     padding: EdgeInsets.fromLTRB(30, 5, 30, 0),
+                    key: _emailKey,
                     child: Material(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         elevation: 100,
                         child: TextFormField(
+                          autovalidate: true,
                           validator: (value) {
                             if (value.isEmpty) {
                               return "Please enter some text";
@@ -143,11 +153,13 @@ class FeedbackPage extends StatelessWidget {
                   ),
                   Container(
                     height: 80,
+                    key: _subjectKey,
                     padding: EdgeInsets.fromLTRB(30, 5, 30, 0),
                     child: Material(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         elevation: 100,
                         child: TextFormField(
+                          autovalidate: true,
                           validator: (value) {
                             if (value.isEmpty) {
                               return "Please enter some text";
@@ -165,7 +177,9 @@ class FeedbackPage extends StatelessWidget {
                     child: Material(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       elevation: 100,
+                      key: _messageKey,
                       child: TextFormField(
+                        autovalidate: true,
                         validator: (value) {
                           if (value.isEmpty) {
                             return "Please enter some text";
