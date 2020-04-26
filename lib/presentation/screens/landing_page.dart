@@ -313,17 +313,17 @@ class LandingPage extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(width: 30,),
-//                      FlatButton(
-//                        child: Text(
-//                          'login page',
-//                          style: TextStyle(color: Colors.white70),
-//                          textAlign: TextAlign.center,
-//                        ),
-//                        onPressed: () {
-//                          // TODO go to feedback page
-//                          Get.to(LoginPage());
-//                        },
-//                      ),
+                      FlatButton(
+                        child: Text(
+                          'login page',
+                          style: TextStyle(color: Colors.white70),
+                          textAlign: TextAlign.center,
+                        ),
+                        onPressed: () {
+                          // TODO go to feedback page
+                          Get.to(LoginPage());
+                        },
+                      ),
                     ],),
                   ],
                 ),
