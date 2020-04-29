@@ -78,7 +78,7 @@ class LandingPage extends StatelessWidget {
                       child: Text(
                         'Dodge Corona',
                         style: TextStyle(
-                            fontSize: 44,
+                            fontSize: 80,
                             color: Colors.white,
                             fontFamily: 'Alegreya'
                         ),
@@ -87,6 +87,7 @@ class LandingPage extends StatelessWidget {
                     ),
                     Container(
                       width: 800,
+                      color: Colors.black38.withOpacity(0.3),
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
                         child: Text(
@@ -102,83 +103,87 @@ class LandingPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        PlatformDependantText(
-                          mainText: 'subscribe to\nstay updated :',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontFamily: 'Alegreya'),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          height: 40,
-                          width: 250,
-                          child: TextFormField(
-                            key: _subscribeKey,
-                            style: TextStyle(color: Colors.white),
-                            controller: subscribeEmailTextFieldController,
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return "Please enter some text";
-                              }
-                              if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
-                                return "please enter correct email";
-                              }
-                              return null;
-                            },
-                            autovalidate: true,
-                            decoration: InputDecoration(
-                              labelStyle:
-                                  TextStyle(color: Colors.white, fontSize: 11),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
+                    Container(
+                      color: Colors.black38.withOpacity(0.3),
+                      width: 800,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          PlatformDependantText(
+                            mainText: 'subscribe to\nstay updated :',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontFamily: 'Alegreya'),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            height: 40,
+                            width: 250,
+                            child: TextFormField(
+                              key: _subscribeKey,
+                              style: TextStyle(color: Colors.white),
+                              controller: subscribeEmailTextFieldController,
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return "Please enter some text";
+                                }
+                                if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
+                                  return "please enter correct email";
+                                }
+                                return null;
+                              },
+                              autovalidate: true,
+                              decoration: InputDecoration(
+                                labelStyle:
+                                    TextStyle(color: Colors.white, fontSize: 11),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                ),
+                                focusColor: Colors.white,
+                                fillColor: Colors.white,
+                                hoverColor: Colors.white,
+                                labelText: 'enter email...',
                               ),
-                              focusColor: Colors.white,
-                              fillColor: Colors.white,
-                              hoverColor: Colors.white,
-                              labelText: 'enter email...',
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        GFButton(text: 'subscribe',
-                        type: GFButtonType.outline2x,
-                        color: Colors.white70,
-                        onPressed: () async {
+                          SizedBox(
+                            width: 10,
+                          ),
+                          GFButton(text: 'subscribe',
+                          type: GFButtonType.outline2x,
+                          color: Colors.white70,
+                          onPressed: () async {
 
-                          log('inside on press');
+                            log('inside on press');
 
-                          Dio dio = Dio();
-                          dio.options.baseUrl = kBaseUrl000;
+                            Dio dio = Dio();
+                            dio.options.baseUrl = kBaseUrl000;
 
-                          Response response = Response();
-                          response = await dio.post("/subscribepublic",
-                              data: jsonEncode({
-                                "email": subscribeEmailTextFieldController.text
-                              }),
-                              options: Options(
-                                  headers: {
-                                    "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                                    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                                    "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-                                    "Access-Control-Allow-Methods": "POST, OPTIONS"
-                                  }));
-                          log(response.toString());
+                            Response response = Response();
+                            response = await dio.post("/subscribepublic",
+                                data: jsonEncode({
+                                  "email": subscribeEmailTextFieldController.text
+                                }),
+                                options: Options(
+                                    headers: {
+                                      "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                                      "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                                      "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+                                      "Access-Control-Allow-Methods": "POST, OPTIONS"
+                                    }));
+                            log(response.toString());
 
-                          // ends here onPress
+                            // ends here onPress
 
-                        },),
-                        SizedBox(
-                          width: 20,
-                        ),
-                      ],
+                          },),
+                          SizedBox(
+                            width: 20,
+                          ),
+                        ],
+                      ),
                     ),
                     Center(
                       child: Row(
@@ -186,21 +191,26 @@ class LandingPage extends StatelessWidget {
                         children: <Widget>[],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'slide the below image up or down to know more',
-                          style: TextStyle(fontSize: 13, color: Colors.white),
-                        ),
-                        Icon(
-                          Icons.unfold_more,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
                     Container(
-                      width: 740,
+                      color: Colors.black38.withOpacity(0.3),
+                      width: 800,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'slide the below image up or down to know more',
+                            style: TextStyle(fontSize: 13, color: Colors.white),
+                          ),
+                          Icon(
+                            Icons.unfold_more,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    Container(
+                      width: 800,
                       child: Material(
                         borderRadius: BorderRadius.all(Radius.circular(50)),
                         elevation: 100,
@@ -225,40 +235,47 @@ class LandingPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(50, 10, 50, 5),
-                          child: PlatformDependantText(
-                            mainText: 'ios and android app under testing, will soon be released',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontFamily: 'Alegreya'),
-                            textAlign: TextAlign.center,
+                    SizedBox(height: 10,),
+                    Container(
+                      width: 800,
+                      color: Colors.black38.withOpacity(0.3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(50, 10, 50, 5),
+                            child: PlatformDependantText(
+                              mainText: 'ios and android app under testing, will soon be released',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontFamily: 'Alegreya'),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                        FlatButton(
-                          child: PlatformDependantText(
-                            mainText: 'feedback?',
-                            style: TextStyle(color: Colors.white70,
-                            fontSize: 12),
-                            textAlign: TextAlign.center,
+                          FlatButton(
+                            child: PlatformDependantText(
+                              mainText: 'feedback?',
+                              style: TextStyle(color: Colors.white70,
+                              fontSize: 12),
+                              textAlign: TextAlign.center,
+                            ),
+                            onPressed: () {
+                              // TODO go to feedback page
+                              Get.to(FeedbackPage());
+                            },
                           ),
-                          onPressed: () {
-                            // TODO go to feedback page
-                            Get.to(FeedbackPage());
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                    SizedBox(height: 10,),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                       Container(
                         width: 800,
+                        color: Colors.black38.withOpacity(0.3),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: Text('MORE DETAILED INFORMATION BELOW',
@@ -268,9 +285,10 @@ class LandingPage extends StatelessWidget {
                         ),
                       ),
                       Container(
+                        color: Colors.black38,
                         width: 800,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.only(left: 20, top: 15),
                           child: Text('This application has been designed for data sensitive people.\n'
                               'Its perfect for people who don\'t want to share their data with with'
                               'different organizations and private companies who sell their data for'
@@ -285,14 +303,16 @@ class LandingPage extends StatelessWidget {
                               'The information will not be shared with any organization at any cost.\n'
                               'For any future changes please keep visiting this website.\n',
                             textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 14, color: Colors.white),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ),
                       ),
 
+                        SizedBox(height: 10,),
                     ],),
 
                     Container(
+                      color: Colors.black38,
                       width: 800,
                       child: Padding(
                         padding: const EdgeInsets.only(),
@@ -303,6 +323,7 @@ class LandingPage extends StatelessWidget {
                       ),
                     ),
                     Container(
+                      color: Colors.black38.withOpacity(0.3),
                       width: 800,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 10, 30, 10),
@@ -322,7 +343,7 @@ class LandingPage extends StatelessWidget {
                             'You can status from the app to different social media or friends and family'
                             'as well to make them aware of COVID-19..',
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 14, color: Colors.white),
+                          style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
                       ),
                     ),
