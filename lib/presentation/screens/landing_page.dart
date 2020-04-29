@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:trackcorona/presentation/screens/login_page.dart';
+import 'package:trackcorona/presentation/widgets/platform_dependent_text.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:ui';
 
@@ -84,27 +85,30 @@ class LandingPage extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
-                      child: Text(
-                        'We took the challenge to bring the economy back to its foot'
-                        ', after the world got affected by variants of COVID-19 '
-                        'keeping in mind your privacy, see how we can achieve it together',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontFamily: 'Alegreya'
+                    Container(
+                      width: 800,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+                        child: Text(
+                          'We took the challenge to bring the economy back to its foot'
+                          ', after the world got affected by variants of COVID-19 '
+                          'keeping in mind your privacy, see how we can achieve it together',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontFamily: 'Alegreya'
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          'subscribe to stay updated :',
+                        PlatformDependantText(
+                          mainText: 'subscribe to\nstay updated :',
                           style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                               color: Colors.white,
                               fontFamily: 'Alegreya'),
                         ),
@@ -113,7 +117,7 @@ class LandingPage extends StatelessWidget {
                         ),
                         Container(
                           height: 40,
-                          width: 300,
+                          width: 250,
                           child: TextFormField(
                             key: _subscribeKey,
                             style: TextStyle(color: Colors.white),
@@ -152,7 +156,7 @@ class LandingPage extends StatelessWidget {
                           log('inside on press');
 
                           Dio dio = Dio();
-                          dio.options.baseUrl = kBaseUrl_chrome;
+                          dio.options.baseUrl = kBaseUrl000;
 
                           Response response = Response();
                           response = await dio.post("/subscribepublic",
@@ -195,20 +199,19 @@ class LandingPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Material(
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                      elevation: 100,
-                      shadowColor: Colors.white,
-                      type: MaterialType.card,
-                      child: GFCarousel(
+                    Container(
+                      width: 740,
+                      child: Material(
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        elevation: 100,
+                        shadowColor: Colors.white,
+                        type: MaterialType.card,
+                        child: GFCarousel(
 //                pagination: true,
-                        scrollDirection: Axis.vertical,
-                        items: imageList.map(
-                          (url) {
-                            return Container(
-                              height: 1000,
-                              margin: EdgeInsets.all(8.0),
-                              child: ClipRRect(
+                          scrollDirection: Axis.vertical,
+                          items: imageList.map(
+                            (url) {
+                              return ClipRRect(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5.0)),
                                 child: Image.asset(
@@ -216,10 +219,10 @@ class LandingPage extends StatelessWidget {
                                   fit: BoxFit.cover,
                                   width: 500.0,
                                 ),
-                              ),
-                            );
-                          },
-                        ).toList(),
+                              );
+                            },
+                          ).toList(),
+                        ),
                       ),
                     ),
                     Row(
@@ -227,19 +230,20 @@ class LandingPage extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.fromLTRB(50, 10, 50, 5),
-                          child: Text(
-                            'ios and android app under testing, will soon be released',
+                          child: PlatformDependantText(
+                            mainText: 'ios and android app under testing, will soon be released',
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                                 color: Colors.white,
                                 fontFamily: 'Alegreya'),
                             textAlign: TextAlign.center,
                           ),
                         ),
                         FlatButton(
-                          child: Text(
-                            'click here to\ngive feedback',
-                            style: TextStyle(color: Colors.white70),
+                          child: PlatformDependantText(
+                            mainText: 'feedback?',
+                            style: TextStyle(color: Colors.white70,
+                            fontSize: 12),
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {
@@ -249,59 +253,77 @@ class LandingPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Text('MORE DETAILED INFORMATION BELOW',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 100, color: Colors.white70),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                      Container(
+                        width: 800,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Text('MORE DETAILED INFORMATION BELOW',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(fontSize: 50, color: Colors.white70),
+                          ),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 30, 10),
-                      child: Text('This application has been designed for data sensitive people.\n'
-                          'Its perfect for people who don\'t want to share their data with with'
-                          'different organizations and private companies who sell their data for'
-                          ' generating revenue.\n'
-                          'This software has been built by an indie developer.\n'
-                          'Our mode of revenue generation is ads or donation, to keep the server running.'
-                          '\nThis application has not been designed for in house use.'
-                          ' \nThe accuracy of this application is dependant on the accuracy of GPS,'
-                          ' but it is still good enough to tackle the issue.\nThis application requires'
-                          ' push notification to be enabled in order to get the notification from the'
-                          ' other person who marked themselves infected of with symptoms.\n'
-                          'The information will not be shared with any organization at any cost.\n'
-                          'For any future changes please keep visiting this website.\n',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      Container(
+                        width: 800,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Text('This application has been designed for data sensitive people.\n'
+                              'Its perfect for people who don\'t want to share their data with with'
+                              'different organizations and private companies who sell their data for'
+                              ' generating revenue.\n'
+                              'This software has been built by an indie developer.\n'
+                              'Our mode of revenue generation is ads or donation, to keep the server running.'
+                              '\nThis application has not been designed for in house use.'
+                              ' \nThe accuracy of this application is dependant on the accuracy of GPS,'
+                              ' but it is still good enough to tackle the issue.\nThis application requires'
+                              ' push notification to be enabled in order to get the notification from the'
+                              ' other person who marked themselves infected of with symptoms.\n'
+                              'The information will not be shared with any organization at any cost.\n'
+                              'For any future changes please keep visiting this website.\n',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(fontSize: 14, color: Colors.white),
+                          ),
+                        ),
                       ),
-                    ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Text('HOW DOES IT WORK?',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 50, color: Colors.white70),
+                    ],),
+
+                    Container(
+                      width: 800,
+                      child: Padding(
+                        padding: const EdgeInsets.only(),
+                        child: Text('HOW DOES IT WORK?',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 50, color: Colors.white70),
+                        ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 30, 10),
-                      child: Text('Step 1:\n'
-                          'Download the app and ask friends and family to download it as well.\n'
-                          '\nStep 2:\n'
-                          'Turn on GPS, which is usually on.\n'
-                          '\nStep 3:\n'
-                          'Turn on map from the application, and keep it turned on.'
-                          '\n\nStep 4:\n'
-                          'You\'ll get notified from us if you came in contact with any person with'
-                          'symptoms of COVID-19 infection.'
-                          '\n\nStep 5:\n'
-                          'You can also notify others if by selecting symptoms or infected option if'
-                          'you came in contact with a potential pathogen.'
-                          '\n\nStep 6:\n'
-                          'You can status from the app to different social media or friends and family'
-                          'as well to make them aware of COVID-19..',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 30, color: Colors.white),
+                    Container(
+                      width: 800,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 30, 10),
+                        child: PlatformDependantText(mainText: 'Step 1:\n'
+                            'Download the app and ask friends and family to download it as well.\n'
+                            '\nStep 2:\n'
+                            'Turn on GPS, which is usually on.\n'
+                            '\nStep 3:\n'
+                            'Turn on map from the application, and keep it turned on.'
+                            '\n\nStep 4:\n'
+                            'You\'ll get notified from us if you came in contact with any person with'
+                            'symptoms of COVID-19 infection.'
+                            '\n\nStep 5:\n'
+                            'You can also notify others if by selecting symptoms or infected option if'
+                            'you came in contact with a potential pathogen.'
+                            '\n\nStep 6:\n'
+                            'You can status from the app to different social media or friends and family'
+                            'as well to make them aware of COVID-19..',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(fontSize: 14, color: Colors.white),
+                        ),
                       ),
                     ),
                     Row(

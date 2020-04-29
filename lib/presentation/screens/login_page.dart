@@ -164,6 +164,7 @@ class LoginPage extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 30, 20, 30),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Column(
                             children: <Widget>[
@@ -263,7 +264,7 @@ class LoginPage extends StatelessWidget {
 //                                ),
 //                              ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   FlatButton(
                                     onPressed: () {
@@ -276,8 +277,7 @@ class LoginPage extends StatelessWidget {
                                       style: TextStyle(color: Colors.white70),
                                     ),
                                   ),
-//                                  Text(",",
-//                                      style: TextStyle(color: Colors.white70),),
+                                  SizedBox(width: 50,),
                                   FlatButton(
                                     onPressed: () {
                                       Get.to(AboutPage());

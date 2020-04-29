@@ -235,7 +235,7 @@ class FeedbackPage extends StatelessWidget {
                             log('inside on press');
 
                             Dio dio = Dio();
-                            dio.options.baseUrl = kBaseUrl_chrome;
+                            dio.options.baseUrl = kBaseUrl000;
 
                             Response response = Response();
                             response = await dio.post("/feedback",

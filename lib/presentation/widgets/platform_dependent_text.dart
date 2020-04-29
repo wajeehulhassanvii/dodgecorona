@@ -1,23 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class PlatformDependentText extends InheritedWidget {
-  const PlatformDependentText({
-    Key key,
-    @required this.object,
-    @required Widget child,
-  })
-      : assert(child != null),
-        super(key: key, child: child);
+class PlatformDependantText extends StatelessWidget {
+  final String mainText;
+  final double textSizeAndroidIos;
+  final double textSizeBrowser;
+  final TextAlign textAlign;
+  final TextStyle style;
 
-  final dynamic object;
-
-  static PlatformDependentText of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(
-        PlatformDependentText) as PlatformDependentText;
-  }
+  const PlatformDependantText({Key key,
+    this.mainText,
+    this.textSizeAndroidIos = 14,
+    this.textSizeBrowser = 14,
+    this.textAlign = TextAlign.start,
+    this.style}) : super(key: key);
 
   @override
-  bool updateShouldNotify(PlatformDependentText old) {
-    return object != old.object;
+  Widget build(BuildContext context) {
+    if(GetPlatform.isWeb){
+
+      return Text
+        (mainText,
+      style: style,
+      textAlign: textAlign,
+      );
+
+    } else {
+
+      return Text(
+        mainText,
+        style: style,
+        textAlign: textAlign,
+      );
+
+    }
+
   }
 }
