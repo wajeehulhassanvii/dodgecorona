@@ -70,6 +70,16 @@ dev_dependencies:
     sdk: flutter
   json_serializable: ^3.3.0
   build_runner: ^1.8.1
+  flutter_launcher_icons: ^0.7.5
+
+  # For logo creation
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/dodgecorona_logo_simple.png"
+  image_path_android: "assets/images/dodgecorona_logo_simple_curved.png"
+  image_path_ios: "assets/images/dodgecorona_logo_simple.png"
+  ios_path_web: "assets/images/dodgecorona_logo_simple.png"
 
 
 

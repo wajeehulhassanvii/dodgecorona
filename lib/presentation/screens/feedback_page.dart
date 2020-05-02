@@ -76,19 +76,26 @@ class FeedbackPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
-                    child: Text(
-                      'Dodge Corona',
-                      style: TextStyle(
-                          fontSize: 44,
-                          color: Colors.white,
-                          fontFamily: 'Alegreya'),
-                      textAlign: TextAlign.center,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(50, 10, 20, 0),
+                        child: Text(
+                          'Dodge Corona',
+                          style: TextStyle(
+                              fontSize: 44,
+                              color: Colors.white,
+                              fontFamily: 'Alegreya'),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Image(image: AssetImage('assets/images/in_app_transparent_logo.png'),
+                      height: 100,),
+                    ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Text(
                       'please give us your feedback, thank you!!!',
                       style: TextStyle(
@@ -101,7 +108,7 @@ class FeedbackPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('FEEDBACK FORM'),
+                      Text('FEEDBACK FORM', style: TextStyle(color: Colors.white70),),
                     ],
                   ),
                   Center(
@@ -137,8 +144,8 @@ class FeedbackPage extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         elevation: 100,
                         child: TextFormField(
-                          autovalidate: true,
-                          validator: (value) {
+                          controller: _emailTextController,
+                          validator: (String value) {
                             if (value.isEmpty) {
                               return "Please enter some text";
                             }
@@ -147,7 +154,7 @@ class FeedbackPage extends StatelessWidget {
                             }
                             return null;
                           },
-                          controller: _emailTextController,
+                          autovalidate: true,
                           decoration: InputDecoration(labelText: 'email'),
                         )),
                   ),
@@ -172,8 +179,8 @@ class FeedbackPage extends StatelessWidget {
                         )),
                   ),
                   Container(
-                    height: 350,
-                    padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
+                    height: 250,
+                    padding: EdgeInsets.fromLTRB(30, 5, 30, 0),
                     child: Material(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       elevation: 100,
@@ -195,70 +202,65 @@ class FeedbackPage extends StatelessWidget {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      GFButton(
-                          text: 'back to landing page',
-                          icon: Icon(
-                            LineAwesomeIcons.backward,
-                            color: Colors.white70,
-                          ),
-                          size: GFSize.SMALL,
-                          color: Colors.white70,
-                          type: GFButtonType.outline2x,
-                          // TODO implement onPress
-                          onPressed: () async {
-                            Get.off(LandingPage());
-                          }),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(50, 10, 50, 5),
-                        child: Text(
-                          'ios and android app under testing, will soon be released',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontFamily: 'Alegreya'),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      GFButton(
-                          text: 'send feedback',
-                          icon: Icon(
-                            LineAwesomeIcons.send,
+                        padding: const EdgeInsets.only(left: 30),
+                        child: GFButton(
+                            text: 'back to landing page',
+                            icon: Icon(
+                              LineAwesomeIcons.backward,
+                              color: Colors.white70,
+                            ),
+                            size: GFSize.SMALL,
                             color: Colors.white70,
-                          ),
-                          size: GFSize.SMALL,
-                          color: Colors.white70,
-                          type: GFButtonType.outline2x,
-                          // TODO implement onPress
-                          onPressed: () async {
-                            log('inside on press');
+                            type: GFButtonType.outline2x,
+                            // TODO implement onPress
+                            onPressed: () async {
+                              Get.off(LandingPage());
+                            }),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 30),
+                        child: GFButton(
+                            text: 'send feedback',
+                            icon: Icon(
+                              LineAwesomeIcons.send,
+                              color: Colors.white70,
+                            ),
+                            size: GFSize.SMALL,
+                            color: Colors.white70,
+                            type: GFButtonType.outline2x,
+                            // TODO implement onPress
+                            onPressed: () async {
+                              log('inside on press');
 
-                            Dio dio = Dio();
-                            dio.options.baseUrl = kBaseUrl000;
+                              Dio dio = Dio();
+                              dio.options.baseUrl = kBaseUrl000;
 
-                            Response response = Response();
-                            response = await dio.post("/feedback",
-                                data: jsonEncode({
-                                  'name': _nameTextController.text,
-                                  'email': _emailTextController.text,
-                                  'subject': _subjectTextController.text,
-                                  'message': _messageTextController.text,
-                                }),
-                                options: Options(headers: {
-                                  "Access-Control-Allow-Origin":
-                                      "*", // Required for CORS support to work
-                                  "Access-Control-Allow-Credentials":
-                                      true, // Required for cookies, authorization headers with HTTPS
-                                  "Access-Control-Allow-Headers":
-                                      "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-                                  "Access-Control-Allow-Methods":
-                                      "POST, OPTIONS"
-                                }));
-                            log(response.toString());
-
-                            // ends here onPress
-                          }),
+                              Response response = Response();
+                              response = await dio.post("/feedback",
+                                  data: jsonEncode({
+                                    'name': _nameTextController.text,
+                                    'email': _emailTextController.text,
+                                    'subject': _subjectTextController.text,
+                                    'message': _messageTextController.text,
+                                  }),
+                                  options: Options(headers: {
+                                    "Access-Control-Allow-Origin":
+                                        "*", // Required for CORS support to work
+                                    "Access-Control-Allow-Credentials":
+                                        true, // Required for cookies, authorization headers with HTTPS
+                                    "Access-Control-Allow-Headers":
+                                        "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+                                    "Access-Control-Allow-Methods":
+                                        "POST, OPTIONS"
+                                  }));
+                              log(response.toString());
+                              Get.offNamed(LandingPage.route);
+                              // ends here onPress
+                            }),
+                      ),
                     ],
                   )
                 ],

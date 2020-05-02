@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:trackcorona/services/apis/api_provider.dart';
 import 'package:trackcorona/services/injector/injector.dart';
@@ -14,7 +15,9 @@ class PushNotificationService {
   static String fcmTokenKey = "fcm_token";
   final FirebaseMessaging _fcm = FirebaseMessaging();
 
+
   Future initialise() async {
+
     log('inside initialize PushNotification');
     if(Platform.isIOS){
       _fcm.requestNotificationPermissions(IosNotificationSettings());
@@ -28,17 +31,20 @@ class PushNotificationService {
       // called when app is in foreground and we receive a push notification
       onMessage: (Map<String, dynamic> message) async {
         log('onMessage>>>>>>>>>>>: $message');
+        _showNotificationWithSound(message['notification']['title'], message['notification']['body']);
       },
 
         // called when app has been completely closed
         onLaunch: (Map<String, dynamic> message) async {
           log('onLaunch>>>>>>>>>>>: $message');
+          _showNotificationWithSound(message['notification']['title'], message['notification']['body']);
     },
 
         // called when app is in background and open app using
         // poush notification in notification drawer.
         onResume: (Map<String, dynamic> message) async {
           log('onResume>>>>>>>>>: $message');
+          _showNotificationWithSound(message['notification']['title'], message['notification']['body']);
         },
 
       onBackgroundMessage: _myBackgroundMessageHandler,
@@ -69,6 +75,31 @@ class PushNotificationService {
     });
 
 
+  }
+
+
+  Future _showNotificationWithSound(
+      String notificationHead, String notificationBody) async {
+
+    GetIt getIt = GetIt.instance;
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    getIt<FlutterLocalNotificationsPlugin>();
+
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+        'your channel id', 'your channel name', 'your channel description',
+//        sound: RawResourceAndroidNotificationSound('slow_spring_board'),
+        importance: Importance.Max,
+        priority: Priority.High);
+    var iOSPlatformChannelSpecifics =
+    new IOSNotificationDetails(sound: "slow_spring_board.aiff");
+    var platformChannelSpecifics = new NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      notificationHead, notificationBody,
+      platformChannelSpecifics,
+//      payload: 'Custom_Sound',
+    );
   }
 
   static void saveDeviceToken() async {

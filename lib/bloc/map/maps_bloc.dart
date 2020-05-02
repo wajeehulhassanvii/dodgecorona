@@ -80,6 +80,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
       Response response;
       Map<String, dynamic> decodedJsonData;
 
+      // TODO change server to check if the users location is latest and within certain time
       try {
         response = await dio.post(
           "/getuserswithindiameter",
@@ -177,6 +178,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
         }
       }
 
+      // TODO again check if the interaction happened within certain time
       if (listOfInteractedUsers.length > 0) {
         dio.post(
           '/interactedusers',

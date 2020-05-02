@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:trackcorona/presentation/repositories/social_media_share_repository.dart';
+import 'package:trackcorona/presentation/screens/account_settings_page.dart';
 import 'package:trackcorona/presentation/widgets/map_page_state_flutter_map.dart';
 import 'dart:convert';
 
@@ -91,9 +92,6 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
 
   SocialMediaShare socialMediaShare = SocialMediaShare();
 
-  // Flutter local notification
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-
   @override
   void initState() {
     pointIndex = 0;
@@ -103,19 +101,6 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
     // for observing the state of the widget
     WidgetsBinding.instance.addObserver(this);
 
-    // initializations for flutter local notification
-    // app_icon is the icon of the app
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    // If you have skipped STEP 3 then change app_icon to @mipmap/ic_launcher
-    var initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon');
-    var initializationSettingsIOS = new IOSInitializationSettings();
-    var initializationSettings = new InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-//        onSelectNotification: onSelectNotification
-    );
 
     BackgroundLocation.getPermissions(
       onGranted: () {
@@ -229,59 +214,11 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                 alignment: Alignment.bottomCenter,
                 child: ListTile(
                   title: Text(
-                    'delete account',
+                    'account settings',
                     style: TextStyle(color: Colors.white70),
                   ),
                   onTap: () async {
-                    // delete the account from here
-
-                    Get.toNamed('/accountsettings');
-
-//                  String accessToken;
-//                  String refreshToken;
-//
-//                  try {
-//                    accessToken =
-//                        sharedPreferenceManager.getString(kAccessTokenKey);
-//                    refreshToken =
-//                        sharedPreferenceManager.getString(kRefreshTokenKey);
-//                  } catch (e) {
-//                    print('token not found');
-//                    print(e);
-//                  }
-//
-//                  Dio dio = Dio();
-//                  dio.clear();
-//                  dio.options.baseUrl = kBaseUrl;
-//
-//                  Response deleteResponse;
-//
-//                  Map<String, dynamic> decodedJsonData;
-//
-//                  print(accessToken);
-//
-//                  String accessTokenBearer = "Bearer " + accessToken;
-//
-//                  try {
-//                    dio.options.headers = {"Authorization": accessTokenBearer};
-//                    deleteResponse = await dio.delete("/deleteuser", data: {
-//                      "access_token": accessToken,
-//                      "refresh_token": refreshToken
-//                    });
-//                    print('done logout, now remove refresh logout');
-//
-//                    if (deleteResponse.statusCode == 200) {
-//                      log('before clearning shared prefs');
-//                      await sharedPreferenceManager.clearAll();
-//                      log('going to login screen');
-//                      Get.off(LoginPage());
-//                    }
-//
-//                    decodedJsonData = jsonDecode(deleteResponse.toString());
-//                    print(decodedJsonData['message']);
-//                  } catch (e) {
-//                    print(e);
-//                  }
+                    Get.toNamed(AccountSettingsPage.route);
                   },
                 ),
               ),
@@ -1563,25 +1500,11 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
         "prev_state", previousStateNameString.toLowerCase());
   }
 
-  Future onSelectNotification(String payload) async {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return new AlertDialog(
-          title: Text(
-            "welcome back",
-            style: TextStyle(color: Colors.white),
-            textAlign: TextAlign.center,
-          ),
-          backgroundColor: Colors.black87,
-//          content: Text(" "),
-        );
-      },
-    );
-  }
-
   Future _showNotificationWithSound(
       String notificationHead, String notificationBody) async {
+    GetIt getIt = GetIt.instance;
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    getIt<FlutterLocalNotificationsPlugin>();
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',
 //        sound: RawResourceAndroidNotificationSound('slow_spring_board'),

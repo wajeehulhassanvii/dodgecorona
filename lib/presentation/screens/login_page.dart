@@ -145,7 +145,6 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
               body: Container(
-                padding: EdgeInsets.symmetric(vertical: 30),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -182,6 +181,8 @@ class LoginPage extends StatelessWidget {
                               ),
                             ],
                           ),
+
+                          Image(image: AssetImage("assets/images/in_app_transparent_logo.png"),height: 150,),
 //                          Image(image: AssetImage('assets/images/track_corona_generic.png'),
 //                          height: 120, width: 120,)
                         ],

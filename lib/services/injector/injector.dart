@@ -17,4 +17,25 @@ Future setupLocator() async {
 
   print('registered sharedpreferencesmanager');
 
+
+  // Flutter local notification
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  // initializations for flutter local notification
+  // app_icon is the icon of the app
+  // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+  // If you have skipped STEP 3 then change app_icon to @mipmap/ic_launcher
+  var initializationSettingsAndroid =
+  new AndroidInitializationSettings('app_icon');
+  var initializationSettingsIOS = new IOSInitializationSettings();
+  var initializationSettings = new InitializationSettings(
+      initializationSettingsAndroid, initializationSettingsIOS);
+  flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin.initialize(initializationSettings,
+//        onSelectNotification: onSelectNotification
+  );
+
+
+  getIt.registerLazySingleton(() => flutterLocalNotificationsPlugin);
+
 }

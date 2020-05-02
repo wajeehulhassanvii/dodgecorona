@@ -11,22 +11,13 @@ import 'package:trackcorona/utilities/constants.dart';
 class ApiProvider {
   final Dio dio = Dio();
   final String _baseUrl = kBaseUrl;
-  final String clientId = 'bengkel-robot-client';
-  final String clientSecret = 'bengkel-robot-secret';
 
   ApiProvider();
 
-  // returns a dio object which always have either a dio obect with header
-  // or an error
   Future<Dio> getDioHttpClient() async {
-    print('before shared preference');
-    var _baseUrl = kBaseUrl;
-    SharedPreferencesManager sharedPreferenceManager =
-        await SharedPreferencesManager.getInstance();
+    SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
 
-    print('before access toekn fetch');
     var _accessToken = sharedPreferenceManager.getString('access_token');
-    log('--------fetched access token ----------');
     Dio dio = Dio();
     Dio tokenDio = Dio();
 
@@ -34,25 +25,39 @@ class ApiProvider {
     dio.options.baseUrl = _baseUrl;
     tokenDio.options.baseUrl = _baseUrl;
     dio.interceptors.requestLock;
+
     if (_accessToken != null) {
+
       log('-----------inside _accessToken != null -----------');
-      log("_accessToken inside _accessToken != null: $_accessToken");
+
       dio.interceptors.add(InterceptorsWrapper(
+
         onRequest: (RequestOptions options) async {
           await addAccessTokenToHeader(options, _accessToken);
+          return options;
         },
-        onError: (DioError error) async {
 
+        onError: (DioError error) async {
           if (error.response?.statusCode == 401) {
             log('-----------error.response?.statusCode == 401 -----------');
             return await refreshToken(error, dio, tokenDio);
           }
+          log('returning error from onError');
           return error;
         },
+
+        onResponse: (Response response){
+          if(response.statusCode==405){
+            log('log onResponse when statusCode 405 $response');
+          }
+          return response;
+        },
+
       ));
     } else {
       log('-----------access token is null -----------');
     }
+
     return dio;
 
   }
@@ -60,46 +65,40 @@ class ApiProvider {
   Future<Object> refreshToken(DioError error, Dio dio, Dio tokenDio) async {
     print('inside refresh block');
     var _baseUrl = kBaseUrl;
-
+    log('error object in refreshToken ${error.toString()}');
     RequestOptions refreshOptions = error.response.request;
 
-//    SharedPreferencesManager sharedPreferenceManager =
-//        await SharedPreferencesManager.getInstance();
-
-    getIt = GetIt.instance;
     SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
-
-    if(sharedPreferenceManager!=null){
-      log('shared preference loaded in _refreshToken method');}
 
     var _refreshToken = sharedPreferenceManager.getString('refresh_token');
     var _accessToken = sharedPreferenceManager.getString('access_token');
 
-    log('----------------- refresh token ----------------');
-//    log(_refreshToken.runtimeType.toString());
-    log('_accessToken in refreshToken: $_accessToken');
-    log('_refreshToken in refreshToken: $_refreshToken');
+    _refreshToken = "Bearer " + _refreshToken;
 
+    refreshOptions.headers["Authorization"] = _refreshToken;
 
-    String refreshToken = "Bearer " + _refreshToken;
-
-    refreshOptions.headers["Authorization"] = refreshToken;
-
-    if (refreshToken != null) {
+    if (_refreshToken != null) {
       lockRequest(dio);
 
       return tokenDio
           .post("/refresh", data: jsonEncode({"refresh_token": _refreshToken,
       "access_token": _accessToken}), options: refreshOptions)
-          .then((response) async {
+          .then((response) {
+
             log('---------got /new access response------------');
+
         var accessToken = AccessToken.fromJson(response.data);
             log('accessToken.value.toString() ${accessToken.value.toString()}');
-        await sharedPreferenceManager.putString(
+
+         sharedPreferenceManager.putString(
             "access_token", accessToken.value.toString());
 
+            String newAccessToken = "Bearer " + accessToken.value;
+            refreshOptions.headers["Authorization"] = newAccessToken;
+            dio.options.headers["Authorization"] = newAccessToken;
+            log(dio.toString());
+
       }).whenComplete(() {
-        log('------------new access token put into sharepreference');
         unlockRequest(dio);
       }).then((_) {
         log('doing dio.request(refreshOptions.path, options: refreshOptions)');

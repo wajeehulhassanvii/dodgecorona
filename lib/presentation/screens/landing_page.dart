@@ -68,307 +68,320 @@ class LandingPage extends StatelessWidget {
                 height: Get.height,
                 width: Get.width,
               ),
-              SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
-                      child: Text(
-                        'Dodge Corona',
-                        style: TextStyle(
-                            fontSize: 80,
-                            color: Colors.white,
-                            fontFamily: 'Alegreya'
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Container(
-                      width: 800,
-                      color: Colors.black38.withOpacity(0.3),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
-                        child: Text(
-                          'We took the challenge to bring the economy back to its foot'
-                          ', after the world got affected by variants of COVID-19 '
-                          'keeping in mind your privacy, see how we can achieve it together',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontFamily: 'Alegreya'
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.black38.withOpacity(0.3),
-                      width: 800,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          PlatformDependantText(
-                            mainText: 'subscribe to\nstay updated :',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontFamily: 'Alegreya'),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Container(
-                            height: 40,
-                            width: 250,
-                            child: TextFormField(
-                              key: _subscribeKey,
-                              style: TextStyle(color: Colors.white),
-                              controller: subscribeEmailTextFieldController,
-                              validator: (String value) {
-                                if (value.isEmpty) {
-                                  return "Please enter some text";
-                                }
-                                if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
-                                  return "please enter correct email";
-                                }
-                                return null;
-                              },
-                              autovalidate: true,
-                              decoration: InputDecoration(
-                                labelStyle:
-                                    TextStyle(color: Colors.white, fontSize: 11),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                focusColor: Colors.white,
-                                fillColor: Colors.white,
-                                hoverColor: Colors.white,
-                                labelText: 'enter email...',
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          GFButton(text: 'subscribe',
-                          type: GFButtonType.outline2x,
-                          color: Colors.white70,
-                          onPressed: () async {
+              Scrollbar(
+                child: SingleChildScrollView(
 
-                            log('inside on press');
-
-                            Dio dio = Dio();
-                            dio.options.baseUrl = kBaseUrl000;
-
-                            Response response = Response();
-                            response = await dio.post("/subscribepublic",
-                                data: jsonEncode({
-                                  "email": subscribeEmailTextFieldController.text
-                                }),
-                                options: Options(
-                                    headers: {
-                                      "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-                                      "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-                                      "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-                                      "Access-Control-Allow-Methods": "POST, OPTIONS"
-                                    }));
-                            log(response.toString());
-
-                            // ends here onPress
-
-                          },),
-                          SizedBox(
-                            width: 20,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[],
-                      ),
-                    ),
-                    Container(
-                      color: Colors.black38.withOpacity(0.3),
-                      width: 800,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'slide the below image up or down to know more',
-                            style: TextStyle(fontSize: 13, color: Colors.white),
-                          ),
-                          Icon(
-                            Icons.unfold_more,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    Container(
-                      width: 800,
-                      child: Material(
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                        elevation: 100,
-                        shadowColor: Colors.white,
-                        type: MaterialType.card,
-                        child: GFCarousel(
-//                pagination: true,
-                          scrollDirection: Axis.vertical,
-                          items: imageList.map(
-                            (url) {
-                              return ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0)),
-                                child: Image.asset(
-                                  url,
-                                  fit: BoxFit.cover,
-                                  width: 500.0,
-                                ),
-                              );
-                            },
-                          ).toList(),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    Container(
-                      width: 800,
-                      color: Colors.black38.withOpacity(0.3),
-                      child: Row(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(50, 10, 50, 5),
-                            child: PlatformDependantText(
-                              mainText: 'ios and android app under testing, will soon be released',
+                            padding: const EdgeInsets.fromLTRB(50, 10, 20, 10),
+                            child: Text(
+                              'Dodge Corona',
                               style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 60,
                                   color: Colors.white,
-                                  fontFamily: 'Alegreya'),
+                                  fontFamily: 'Alegreya'
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ),
-                          FlatButton(
-                            child: PlatformDependantText(
-                              mainText: 'feedback?',
-                              style: TextStyle(color: Colors.white70,
-                              fontSize: 12),
-                              textAlign: TextAlign.center,
-                            ),
-                            onPressed: () {
-                              // TODO go to feedback page
-                              Get.to(FeedbackPage());
-                            },
-                          ),
+                          Image(image: AssetImage('assets/images/in_app_transparent_logo.png'),
+                          height: 100,),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 10,),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
                       Container(
                         width: 800,
                         color: Colors.black38.withOpacity(0.3),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Text('MORE DETAILED INFORMATION BELOW',
-                            textAlign: TextAlign.start,
+                          padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+                          child: Text(
+                            'We took the challenge to bring the economy back to its foot'
+                            ', after the world got affected by variants of COVID-19 '
+                            'keeping in mind your privacy, see how we can achieve it together',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontFamily: 'Alegreya'
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        color: Colors.black38.withOpacity(0.3),
+                        width: 800,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            PlatformDependantText(
+                              mainText: 'subscribe to\nstay updated :',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontFamily: 'Alegreya'),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Container(
+                              height: 40,
+                              width: 250,
+                              child: TextFormField(
+                                key: _subscribeKey,
+                                style: TextStyle(color: Colors.white),
+                                controller: subscribeEmailTextFieldController,
+                                validator: (String value) {
+                                  if (value.isEmpty) {
+                                    return "Please enter some text";
+                                  }
+                                  if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
+                                    return "please enter correct email";
+                                  }
+                                  return null;
+                                },
+                                autovalidate: true,
+                                decoration: InputDecoration(
+                                  labelStyle:
+                                      TextStyle(color: Colors.white, fontSize: 11),
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
+                                  focusColor: Colors.white,
+                                  fillColor: Colors.white,
+                                  hoverColor: Colors.white,
+                                  labelText: 'enter email...',
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            GFButton(text: 'subscribe',
+                            type: GFButtonType.outline2x,
+                            size: GFSize.SMALL,
+                            color: Colors.white70,
+                            onPressed: () async {
+
+                              log('inside on press');
+
+                              Dio dio = Dio();
+                              dio.options.baseUrl = kBaseUrl000;
+
+                              Response response = Response();
+                              response = await dio.post("/subscribepublic",
+                                  data: jsonEncode({
+                                    "email": subscribeEmailTextFieldController.text
+                                  }),
+                                  options: Options(
+                                      headers: {
+                                        "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+                                        "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+                                        "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+                                        "Access-Control-Allow-Methods": "POST, OPTIONS"
+                                      }));
+                              log(response.toString());
+
+                              // ends here onPress
+
+                            },),
+                            SizedBox(
+                              width: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[],
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      Container(
+                        color: Colors.black38.withOpacity(0.3),
+                        width: 800,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'slide the below image up or down to know more',
+                              style: TextStyle(fontSize: 13, color: Colors.white),
+                            ),
+                            Icon(
+                              Icons.unfold_more,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      Container(
+                        width: 800,
+                        child: Material(
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          elevation: 100,
+                          shadowColor: Colors.white,
+                          type: MaterialType.card,
+                          child: GFCarousel(
+//                pagination: true,
+                            scrollDirection: Axis.vertical,
+                            items: imageList.map(
+                              (url) {
+                                return ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5.0)),
+                                  child: Image.asset(
+                                    url,
+                                    fit: BoxFit.cover,
+                                    width: 500.0,
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      Container(
+                        width: 800,
+                        color: Colors.black38.withOpacity(0.3),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 10, 30, 5),
+                              child: PlatformDependantText(
+                                mainText: 'ios and android app under testing, will soon be released',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontFamily: 'Alegreya'),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            FlatButton(
+                              child: PlatformDependantText(
+                                mainText: 'feedback?',
+                                style: TextStyle(color: Colors.white70,
+                                fontSize: 12),
+                                textAlign: TextAlign.center,
+                              ),
+                              onPressed: () {
+                                // TODO go to feedback page
+                                Get.to(FeedbackPage());
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                        Container(
+                          width: 800,
+                          color: Colors.black38.withOpacity(0.3),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text('MORE DETAILED INFORMATION BELOW',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(fontSize: 50, color: Colors.white70),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color: Colors.black38,
+                          width: 800,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20, top: 15),
+                            child: Text('This application has been designed for data sensitive people.\n\n'
+                                'Its perfect for people who don\'t want to share their data with with'
+                                'different organizations and private companies who sell their data for'
+                                ' generating revenue.\n\n'
+                                'This software has been built by an indie developer.\n\n'
+                                'The mode of revenue generation is ads and donation, to keep the server running.'
+                                '\n\nNo kind of analytics have been applied for ad targetting.'
+                                '\n\nThis application has not been designed for in house use.'
+                                ' \n\nThe accuracy of this application is dependant on the accuracy of GPS,'
+                                ' but it is still good enough to tackle the issue.\n\nThis application requires'
+                                ' push notification to be enabled in order to get the notification from the'
+                                ' other person who marked themselves infected of with symptoms.\n\n'
+                                'The information will not be shared with any organization at any cost.\n\n'
+                                'For any future changes please keep visiting this website.\n',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                          ),
+                        ),
+
+                          SizedBox(height: 10,),
+                      ],),
+
+                      Container(
+                        color: Colors.black38,
+                        width: 800,
+                        child: Padding(
+                          padding: const EdgeInsets.only(),
+                          child: Text('HOW DOES IT WORK?',
+                            textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 50, color: Colors.white70),
                           ),
                         ),
                       ),
                       Container(
-                        color: Colors.black38,
+                        color: Colors.black38.withOpacity(0.3),
                         width: 800,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 20, top: 15),
-                          child: Text('This application has been designed for data sensitive people.\n'
-                              'Its perfect for people who don\'t want to share their data with with'
-                              'different organizations and private companies who sell their data for'
-                              ' generating revenue.\n'
-                              'This software has been built by an indie developer.\n'
-                              'Our mode of revenue generation is ads or donation, to keep the server running.'
-                              '\nThis application has not been designed for in house use.'
-                              ' \nThe accuracy of this application is dependant on the accuracy of GPS,'
-                              ' but it is still good enough to tackle the issue.\nThis application requires'
-                              ' push notification to be enabled in order to get the notification from the'
-                              ' other person who marked themselves infected of with symptoms.\n'
-                              'The information will not be shared with any organization at any cost.\n'
-                              'For any future changes please keep visiting this website.\n',
+                          padding: const EdgeInsets.fromLTRB(20, 10, 30, 10),
+                          child: PlatformDependantText(mainText: 'Step 1:\n'
+                              'Download the app and ask friends and family to download it as well.\n'
+                              '\nStep 2:\n'
+                              'Turn on GPS, which is usually on.\n'
+                              '\nStep 3:\n'
+                              'Turn on map from the application.'
+                              '\n\nStep 4:\n'
+                              'You\'ll get notified from us if you came in contact with any person with '
+                              'symptoms of COVID-19 infection.'
+                              '\n\nStep 5:\n'
+                              'Likewise, you can also notify other users by changing your status to symptoms or infected '
+                              ' when you feel that you have symptoms or infection.'
+                              '\n\nStep 6:\n'
+                              'You can share status from the app to different social media or friends and family'
+                              ' as well to make them aware of COVID-19..',
                             textAlign: TextAlign.start,
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ),
                       ),
-
-                        SizedBox(height: 10,),
-                    ],),
-
-                    Container(
-                      color: Colors.black38,
-                      width: 800,
-                      child: Padding(
-                        padding: const EdgeInsets.only(),
-                        child: Text('HOW DOES IT WORK?',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 50, color: Colors.white70),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.black38.withOpacity(0.3),
-                      width: 800,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 30, 10),
-                        child: PlatformDependantText(mainText: 'Step 1:\n'
-                            'Download the app and ask friends and family to download it as well.\n'
-                            '\nStep 2:\n'
-                            'Turn on GPS, which is usually on.\n'
-                            '\nStep 3:\n'
-                            'Turn on map from the application, and keep it turned on.'
-                            '\n\nStep 4:\n'
-                            'You\'ll get notified from us if you came in contact with any person with'
-                            'symptoms of COVID-19 infection.'
-                            '\n\nStep 5:\n'
-                            'You can also notify others if by selecting symptoms or infected option if'
-                            'you came in contact with a potential pathogen.'
-                            '\n\nStep 6:\n'
-                            'You can status from the app to different social media or friends and family'
-                            'as well to make them aware of COVID-19..',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                      Text('Thank you',
-                        style: TextStyle(fontSize: 15, color: Colors.white70),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(width: 30,),
-                      FlatButton(
-                        child: Text(
-                          'login page',
-                          style: TextStyle(color: Colors.white70),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                        Text('Thank you',
+                          style: TextStyle(fontSize: 15, color: Colors.white70),
                           textAlign: TextAlign.center,
                         ),
-                        onPressed: () {
-                          // TODO go to feedback page
-                          Get.to(LoginPage());
-                        },
-                      ),
-                    ],),
-                  ],
+                        SizedBox(width: 30,),
+                        FlatButton(
+                          child: Text(
+                            'login page',
+                            style: TextStyle(color: Colors.white70),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: () {
+                            // TODO go to feedback page
+                            Get.to(LoginPage());
+                          },
+                        ),
+                      ],),
+                    ],
+                  ),
                 ),
               )
             ],
