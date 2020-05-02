@@ -68,6 +68,8 @@ class ApiProvider {
     log('error object in refreshToken ${error.toString()}');
     RequestOptions refreshOptions = error.response.request;
 
+    RequestOptions newOptions = error.response.request;
+
     SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
 
     var _refreshToken = sharedPreferenceManager.getString('refresh_token');
@@ -75,14 +77,14 @@ class ApiProvider {
 
     _refreshToken = "Bearer " + _refreshToken;
 
-    refreshOptions.headers["Authorization"] = _refreshToken;
+    newOptions.headers["Authorization"] = _refreshToken;
 
     if (_refreshToken != null) {
       lockRequest(dio);
 
       return tokenDio
           .post("/refresh", data: jsonEncode({"refresh_token": _refreshToken,
-      "access_token": _accessToken}), options: refreshOptions)
+      "access_token": _accessToken}), options: newOptions)
           .then((response) {
 
             log('---------got /new access response------------');
@@ -94,9 +96,17 @@ class ApiProvider {
             "access_token", accessToken.value.toString());
 
             String newAccessToken = "Bearer " + accessToken.value;
-            refreshOptions.headers["Authorization"] = newAccessToken;
+
             dio.options.headers["Authorization"] = newAccessToken;
+
+            tokenDio.options.headers["Authorization"] = newAccessToken;
+            tokenDio.options.method=dio.options.method;
+
+            refreshOptions.headers["Authorization"] = newAccessToken;
+            refreshOptions.method=dio.options.method;
             log(dio.toString());
+
+
 
       }).whenComplete(() {
         unlockRequest(dio);
