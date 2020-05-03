@@ -277,37 +277,41 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                           "Authorization": accessTokenBearer
                         };
 
-                        logoutResponse = await dio.delete("/logout", data: {
+                         await dio.delete("/logout", data: {
                           "access_token": accessToken,
                           "refresh_token": refreshToken
+                        }).then((logoutResponse) async {
+
+                          Dio newDio = Dio();
+                          newDio.options.baseUrl = kBaseUrl;
+                          print('done logout, now remove refresh logout');
+
+                          newDio.options.headers = {
+                            "Authorization": refreshTokenBearer
+                          };
+
+                          await newDio.delete("/logoutrefresh",
+                              data: {
+                                "access_token": accessToken,
+                                "refresh_token": refreshToken
+                              }).then((refreshResponse) async {
+                                log('when complete of logoutrefresh');
+                              log('before clearning shared prefs');
+
+                              // we don't clear shared preference because we are only logging out
+                              // and we will need jwt to check if user is logged in
+                              await sharedPreferenceManager.clearAll();
+                              log('going to login screen');
+                              Get.offNamed(LoginPage.route);
+
+                            decodedJsonData =
+                                jsonDecode(refreshResponse.toString());
+                            print(decodedJsonData['message']);
+                          });
+                          print('trying to remove refresh logout');
+
+
                         });
-                        print('done logout, now remove refresh logout');
-
-                        dio.options.headers = {
-                          "Authorization": refreshTokenBearer
-                        };
-                        refreshResponse = await dio.delete("/logoutrefresh",
-                            data: {
-                              "access_token": accessToken,
-                              "refresh_token": refreshToken
-                            });
-                        print('trying to remove refresh logout');
-
-
-                        if (refreshResponse.statusCode == 200 &&
-                            logoutResponse.statusCode == 200) {
-                          log('before clearning shared prefs');
-
-                          // we don't clear shared preference because we are only logging out
-                          // and we will need jwt to check if user is logged in
-                          await sharedPreferenceManager.clearAll();
-                          log('going to login screen');
-                          Get.offNamed(LoginPage.route);
-                        }
-
-                        decodedJsonData =
-                            jsonDecode(refreshResponse.toString());
-                        print(decodedJsonData['message']);
 
 
                       } catch (e) {
