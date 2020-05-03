@@ -26,6 +26,7 @@ import 'package:trackcorona/bloc/map/bloc.dart';
 import 'package:trackcorona/bloc/map/maps_bloc.dart';
 import 'package:trackcorona/presentation/repositories/map_repository.dart';
 import 'package:trackcorona/presentation/screens/login_page.dart';
+import 'package:trackcorona/services/apis/api_provider.dart';
 import 'package:trackcorona/services/servicpush_notification_service/push_notification_service.dart';
 import 'package:trackcorona/services/shared_preference_manager.dart';
 import 'package:trackcorona/utilities/constants.dart';
@@ -253,8 +254,8 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                         print(e);
                       }
 
-                      Dio dio = Dio();
-                      dio.clear();
+                      Dio dio = await ApiProvider().getDioHttpClient();
+//                      dio.clear();
                       dio.options.baseUrl = kBaseUrl;
 
                       Response logoutResponse;
@@ -298,7 +299,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                           // and we will need jwt to check if user is logged in
                           await sharedPreferenceManager.clearAll();
                           log('going to login screen');
-                          Get.off(LoginPage());
+                          Get.offNamed(LoginPage.route);
                         }
 
                         decodedJsonData =

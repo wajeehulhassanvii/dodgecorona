@@ -9,7 +9,6 @@ import 'package:trackcorona/services/shared_preference_manager.dart';
 import 'package:trackcorona/utilities/constants.dart';
 
 class ApiProvider {
-  final Dio dio = Dio();
   final String _baseUrl = kBaseUrl;
 
   ApiProvider();
@@ -17,7 +16,7 @@ class ApiProvider {
   Future<Dio> getDioHttpClient() async {
     SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
 
-    var _accessToken = sharedPreferenceManager.getString('access_token');
+    String _accessToken = sharedPreferenceManager.getString('access_token');
     Dio dio = Dio();
     Dio tokenDio = Dio();
 
@@ -64,7 +63,6 @@ class ApiProvider {
 
   Future<Object> refreshToken(DioError error, Dio dio, Dio tokenDio) async {
     print('inside refresh block');
-    var _baseUrl = kBaseUrl;
     log('error object in refreshToken ${error.toString()}');
     RequestOptions refreshOptions = error.response.request;
 
@@ -72,8 +70,8 @@ class ApiProvider {
 
     SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
 
-    var _refreshToken = sharedPreferenceManager.getString('refresh_token');
-    var _accessToken = sharedPreferenceManager.getString('access_token');
+    String _refreshToken = sharedPreferenceManager.getString('refresh_token');
+    String _accessToken = sharedPreferenceManager.getString('access_token');
 
     _refreshToken = "Bearer " + _refreshToken;
 
@@ -101,6 +99,7 @@ class ApiProvider {
 
             tokenDio.options.headers["Authorization"] = newAccessToken;
             tokenDio.options.method=dio.options.method;
+            tokenDio.options.contentType=dio.options.contentType;
 
             refreshOptions.headers["Authorization"] = newAccessToken;
             refreshOptions.method=dio.options.method;
