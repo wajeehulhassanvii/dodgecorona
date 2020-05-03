@@ -14,61 +14,54 @@ class ApiProvider {
   ApiProvider();
 
   Future<Dio> getDioHttpClient() async {
-    SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
+    SharedPreferencesManager sharedPreferenceManager =
+        getIt<SharedPreferencesManager>();
 
     String _accessToken = sharedPreferenceManager.getString('access_token');
     Dio dio = Dio();
     Dio tokenDio = Dio();
-
+    String methodType = "GET";
 
     dio.options.baseUrl = _baseUrl;
     tokenDio.options.baseUrl = _baseUrl;
-    dio.interceptors.requestLock;
 
     if (_accessToken != null) {
-
       log('-----------inside _accessToken != null -----------');
 
       dio.interceptors.add(InterceptorsWrapper(
-
         onRequest: (RequestOptions options) async {
           await addAccessTokenToHeader(options, _accessToken);
+          log('options.method is ${options.method}');
+          methodType = options.method;
           return options;
         },
-
         onError: (DioError error) async {
           if (error.response?.statusCode == 401) {
             log('-----------error.response?.statusCode == 401 -----------');
-            return await refreshToken(error, dio, tokenDio);
+            return await refreshToken(error, dio, tokenDio, methodType);
           }
           log('returning error from onError');
           return error;
         },
-
-        onResponse: (Response response){
-          if(response.statusCode==405){
-            log('log onResponse when statusCode 405 $response');
-          }
+        onResponse: (Response response) {
           return response;
         },
-
       ));
     } else {
       log('-----------access token is null -----------');
     }
 
     return dio;
-
   }
 
-  Future<Object> refreshToken(DioError error, Dio dio, Dio tokenDio) async {
+  Future<Object> refreshToken(
+      DioError error, Dio dio, Dio tokenDio, String methodType) async {
     print('inside refresh block');
-    log('error object in refreshToken ${error.toString()}');
     RequestOptions refreshOptions = error.response.request;
-
     RequestOptions newOptions = error.response.request;
 
-    SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
+    SharedPreferencesManager sharedPreferenceManager =
+        getIt<SharedPreferencesManager>();
 
     String _refreshToken = sharedPreferenceManager.getString('refresh_token');
     String _accessToken = sharedPreferenceManager.getString('access_token');
@@ -81,39 +74,34 @@ class ApiProvider {
       lockRequest(dio);
 
       return tokenDio
-          .post("/refresh", data: jsonEncode({"refresh_token": _refreshToken,
-      "access_token": _accessToken}), options: newOptions)
-          .then((response) {
-
-            log('---------got /new access response------------');
+          .post("/refresh",
+              data: jsonEncode({
+                "refresh_token": _refreshToken,
+                "access_token": _accessToken
+              }),
+              options: newOptions)
+          .then((response) async {
+        log('---------got /new access response------------');
 
         var accessToken = AccessToken.fromJson(response.data);
-            log('accessToken.value.toString() ${accessToken.value.toString()}');
-
-         sharedPreferenceManager.putString(
+        log('accessToken.value.toString() ${accessToken.value.toString()}');
+        await sharedPreferenceManager.putString(
             "access_token", accessToken.value.toString());
 
-            String newAccessToken = "Bearer " + accessToken.value;
+        String newAccessToken = "Bearer " + accessToken.value;
 
-            dio.options.headers["Authorization"] = newAccessToken;
+        dio.options.headers["Authorization"] = newAccessToken;
 
-            tokenDio.options.headers["Authorization"] = newAccessToken;
-            tokenDio.options.method=dio.options.method;
-            tokenDio.options.contentType=dio.options.contentType;
-
-            refreshOptions.headers["Authorization"] = newAccessToken;
-            refreshOptions.method=dio.options.method;
-            refreshOptions.contentType=dio.options.contentType;
-
-            log(dio.toString());
-
+        refreshOptions.headers["Authorization"] = newAccessToken;
+        refreshOptions.method = methodType;
+        refreshOptions.contentType = dio.options.contentType;
       }).whenComplete(() {
         unlockRequest(dio);
       }).then((_) {
         log('doing dio.request(refreshOptions.path, options: refreshOptions)');
-        print("refreshOptions.data ${refreshOptions.data}");
-        return tokenDio.request(refreshOptions.path, options: refreshOptions,
-        data: refreshOptions.data);
+        Dio newDio = Dio();
+        return newDio.request(refreshOptions.path,
+            options: refreshOptions, data: error.request.data);
       });
     }
     return error;
@@ -121,12 +109,14 @@ class ApiProvider {
 
   void unlockRequest(Dio dio) {
     dio.unlock();
+    dio.interceptors.requestLock.unlock();
     dio.interceptors.responseLock.unlock();
     dio.interceptors.errorLock.unlock();
   }
 
   void lockRequest(Dio dio) {
     dio.lock();
+    dio.interceptors.requestLock.lock();
     dio.interceptors.responseLock.lock();
     dio.interceptors.errorLock.lock();
   }
@@ -142,5 +132,4 @@ class ApiProvider {
     refreshToken = "Bearer " + refreshToken;
     options.headers["Authorization"] = refreshToken;
   }
-
 }

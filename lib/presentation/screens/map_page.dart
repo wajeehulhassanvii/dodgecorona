@@ -244,6 +244,18 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                       String accessToken;
                       String refreshToken;
 
+
+                      Dio dio = await ApiProvider().getDioHttpClient();
+//                      dio.clear();
+//                      dio.options.baseUrl = kBaseUrl;
+
+                      Response logoutResponse;
+                      Response refreshResponse;
+
+                      Map<String, dynamic> decodedJsonData;
+
+                      print(accessToken);
+
                       try {
                         accessToken =
                             sharedPreferenceManager.getString(kAccessTokenKey);
@@ -254,26 +266,17 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                         print(e);
                       }
 
-                      Dio dio = await ApiProvider().getDioHttpClient();
-//                      dio.clear();
-                      dio.options.baseUrl = kBaseUrl;
-
-                      Response logoutResponse;
-                      Response refreshResponse;
-
-                      Map<String, dynamic> decodedJsonData;
-
-                      print(accessToken);
-
 //                  Options refreshOptions;
                       String refreshTokenBearer = "Bearer " + refreshToken;
 
                       String accessTokenBearer = "Bearer " + accessToken;
 
                       try {
+
                         dio.options.headers = {
                           "Authorization": accessTokenBearer
                         };
+
                         logoutResponse = await dio.delete("/logout", data: {
                           "access_token": accessToken,
                           "refresh_token": refreshToken
@@ -1328,6 +1331,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                           color: Colors.grey[850],
                           size: GFSize.MEDIUM,
                           onPressed: () async {
+
                             if (toggleSwitchOn == false) {
                               GpsLatlng gpsLatlng = await Gps.currentGps();
                               double tempLatitude = double.parse(gpsLatlng.lat);
@@ -1346,6 +1350,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                               showSnackBar(
                                   'map updating', 'you are in live mode');
                             }
+
                           },
                         ),
                         SizedBox(
