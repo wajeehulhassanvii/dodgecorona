@@ -104,15 +104,17 @@ class ApiProvider {
 
             refreshOptions.headers["Authorization"] = newAccessToken;
             refreshOptions.method=dio.options.method;
+            refreshOptions.contentType=dio.options.contentType;
+
             log(dio.toString());
-
-
 
       }).whenComplete(() {
         unlockRequest(dio);
       }).then((_) {
         log('doing dio.request(refreshOptions.path, options: refreshOptions)');
-        return tokenDio.request(refreshOptions.path, options: refreshOptions);
+        print("refreshOptions.data ${refreshOptions.data}");
+        return tokenDio.request(refreshOptions.path, options: refreshOptions,
+        data: refreshOptions.data);
       });
     }
     return error;
