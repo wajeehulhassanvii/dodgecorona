@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
 
             if (snapshot.data == true) {
               log('inside isLoggedIn true');
-              var user = snapshot.data; //
+              var user = snapshot.data; // //
               print(snapshot); //
               print(snapshot.data); // this is your user instance
               /// is because there is user already logged
