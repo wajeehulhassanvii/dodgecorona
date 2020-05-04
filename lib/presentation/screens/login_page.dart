@@ -71,21 +71,35 @@ class LoginPageFormBloc extends FormBloc<String, String> {
 //                "rememberMe": rememberMeBooleanField.value
                 }));
 
-        decodedJsonData=jsonDecode(response.toString());
-        print(decodedJsonData);
+        if (response.statusCode == 200 ){
 
-        PushNotificationService.saveDeviceToken();
+          decodedJsonData=jsonDecode(response.toString());
+          print(decodedJsonData);
 
-        // initialize getIt
-        getIt = GetIt.instance;
-        SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
+          PushNotificationService.saveDeviceToken();
 
-        await sharedPreferenceManager.putAccessToken(decodedJsonData['access_token']).whenComplete(() => print(' access token stored'));
-        await sharedPreferenceManager.putRefreshToken(decodedJsonData['refresh_token']).whenComplete(() => print('refresh token stored'));
+          // initialize getIt
+          getIt = GetIt.instance;
+          SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
 
-        String tempAccessToken = sharedPreferenceManager.getString('access_token');
-        print('--------------------- $tempAccessToken');
+          await sharedPreferenceManager.putAccessToken(decodedJsonData['access_token']).whenComplete(() => print(' access token stored'));
+          await sharedPreferenceManager.putRefreshToken(decodedJsonData['refresh_token']).whenComplete(() => print('refresh token stored'));
 
+          String tempAccessToken = sharedPreferenceManager.getString('access_token');
+          print('--------------------- $tempAccessToken');
+
+        } else if (response.statusCode == 205){
+
+          decodedJsonData=jsonDecode(response.toString());
+          print(decodedJsonData);
+
+          PushNotificationService.saveDeviceToken();
+
+          // initialize getIt
+          getIt = GetIt.instance;
+          SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
+
+        }
       } catch (e) {
         print(e);
       } // inner ctry/catch block ends
@@ -93,6 +107,9 @@ class LoginPageFormBloc extends FormBloc<String, String> {
       await Future<void>.delayed(Duration(milliseconds: 1000));
 
       if (response.statusCode == 200) {
+        emitSubmitting(progress: 1);
+        emitSuccess(canSubmitAgain: true);
+      } else if (response.statusCode == 205) {
         emitSubmitting(progress: 1);
         emitSuccess(canSubmitAgain: true);
       } else {

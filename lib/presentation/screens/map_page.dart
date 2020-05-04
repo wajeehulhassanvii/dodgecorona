@@ -300,7 +300,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
 
                               // we don't clear shared preference because we are only logging out
                               // and we will need jwt to check if user is logged in
-                              await sharedPreferenceManager.clearAll();
+//                              await sharedPreferenceManager.clearAll();
                               log('going to login screen');
                               Get.offNamed(LoginPage.route);
 
