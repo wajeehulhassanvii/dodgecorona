@@ -8,6 +8,7 @@ import 'package:getflutter/getflutter.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:trackcorona/presentation/screens/login_page.dart';
 import 'package:trackcorona/presentation/screens/success_screen.dart';
+import 'package:trackcorona/utilities/constants.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
 import 'package:trackcorona/utilities/loading_dialog.dart';
 import 'package:get/get.dart';
@@ -99,10 +100,8 @@ class RegistrationPageFormBloc extends FormBloc<String, String> {
 
     try {
       try {
-//        response = await dio.post("http://192.168.1.102:8000/sendregistrationdata",
-//        response = await dio.post("http://127.0.0.1:8000/sendregistrationdata",
-
-        response = await dio.post("http://10.0.2.2:8000/sendregistrationdata",
+      dio.options.baseUrl = kBaseUrl;
+        response = await dio.post("/sendregistrationdata",
             data: jsonEncode({
               "email": emailField.value,
               "password": passwordField.value,

@@ -43,10 +43,12 @@ class SharedPreferencesManager {
 
   String getString(String key) => _sharedPreferences.getString(key);
 
+  String getAccessToken() => _sharedPreferences.getString(keyAccessToken);
+
   Future<bool> putAccessToken(String accessTokenvalue) =>
       _sharedPreferences.setString(keyAccessToken, accessTokenvalue);
 
-  Future<bool> putRefreshToken(String refreshTokenvalue) =>
+    Future<bool> putRefreshToken(String refreshTokenvalue) =>
       _sharedPreferences.setString(keyRefreshToken, refreshTokenvalue);
 
   Future<bool> putStringList(String key, List<String> value) =>

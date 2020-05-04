@@ -25,21 +25,25 @@ class AccountSettingsPage extends StatelessWidget {
         getIt<SharedPreferencesManager>();
 
     return Scaffold(
+      backgroundColor: Colors.blue[100],
       appBar: AppBar(
-        title: Text('account settings', style: TextStyle(color: Colors.white70),),
+        title: Text('account settings', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blue,
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            SizedBox(height: 10,),
             Container(
               color: Colors.white70,
-              width: Get.width * 0.8,
+              width: Get.width * 0.90,
               height: Get.height * 0.1,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  SizedBox(width: 10),
                   Icon(Icons.delete, size: 30),
                   SizedBox(width: 10),
                   Text(
@@ -127,17 +131,19 @@ class AccountSettingsPage extends StatelessWidget {
 
                     },
                   ),
+                  SizedBox(width: 10),
                 ],
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 10,),
             Container(
               color: Colors.white70,
-              width: Get.width * 0.8,
+              width: Get.width * 0.90,
               height: Get.height * 0.1,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  SizedBox(width: 10),
                   Icon(Icons.delete, size: 30),
                   SizedBox(width: 10),
                   Text(
@@ -225,17 +231,19 @@ class AccountSettingsPage extends StatelessWidget {
 
                     },
                   ),
+                  SizedBox(width: 10),
                 ],
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 10,),
             Container(
               color: Colors.white70,
-              width: Get.width * 0.8,
+              width: Get.width * 0.90,
               height: Get.height * 0.1,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  SizedBox(width: 10),
                   Icon(Icons.delete, size: 30),
                   SizedBox(width: 10),
                   Text(
@@ -323,6 +331,7 @@ class AccountSettingsPage extends StatelessWidget {
 
                     },
                   ),
+                  SizedBox(width: 10),
                 ],
               ),
             ),

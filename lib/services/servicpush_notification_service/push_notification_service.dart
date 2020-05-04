@@ -10,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:trackcorona/services/apis/api_provider.dart';
 import 'package:trackcorona/services/injector/injector.dart';
 import 'package:trackcorona/services/shared_preference_manager.dart';
+import 'package:trackcorona/utilities/constants.dart';
 
 class PushNotificationService {
   static String fcmTokenKey = "fcm_token";
@@ -160,11 +161,20 @@ class PushNotificationService {
     // whenever there is refresh then check jwt and login then store
     // fcb_token in database
 
-
-    getIt = GetIt.instance;
     SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
 
     String newToken = await _fcm.getToken();
+
+    // TODO first check old FCM token if its active otherwise
+    // if not active then save otherwise don't call save token api
+//    String oldAccessToken = sharedPreferenceManager.getAccessToken();
+//    Dio oldDio = Dio();
+//    oldDio.options.baseUrl = kBaseUrl;
+//    oldAccessToken = "Bearer " + oldAccessToken;
+//    oldDio.options.headers["Authorization"] = oldAccessToken;
+//    Response oldResponse = await oldDio.post('/savefcmtoken', data: jsonEncode({
+//      fcmTokenKey : newToken
+//    }));
 
 
     // save newToken in database
