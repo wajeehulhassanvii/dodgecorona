@@ -146,6 +146,7 @@ class MyApp extends StatelessWidget {
     Response checkLoginResponse = Response();
 
     Dio dio = await ApiProvider().getDioHttpClient();
+    log('this is the header auth ${dio.options.headers.toString()}');
     checkLoginResponse = await dio.get('/checklogin');
     log('after >>>>>> checkLoginResponse = await dio.get(\'/checklogin\')');
     Map<String, dynamic> decodedJsonData;

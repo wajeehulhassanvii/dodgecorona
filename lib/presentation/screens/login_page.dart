@@ -1,16 +1,19 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackcorona/presentation/screens/about_page.dart';
 import 'package:trackcorona/presentation/screens/map_page.dart';
 import 'package:trackcorona/presentation/screens/registration_page.dart';
 import 'package:trackcorona/services/apis/api_provider.dart';
 import 'package:trackcorona/services/servicpush_notification_service/push_notification_service.dart';
 import 'package:trackcorona/services/shared_preference_manager.dart';
+import 'package:trackcorona/utilities/constants.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
 import 'package:trackcorona/utilities/loading_dialog.dart';
 
@@ -56,8 +59,24 @@ class LoginPageFormBloc extends FormBloc<String, String> {
   // modifying onSubmitting
   @override
   void onSubmitting() async {
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String _refreshToken = prefs.getString("refresh_token");
+    String tokenType = "access";
     Dio dio = await ApiProvider().getDioHttpClient();
+
+    String _storedAccessToken = prefs.getString("access_token");
+    if(_refreshToken != null){
+      dio.clear();
+//      dio.options.headers['Authorization'] = "Bearer " +  _refreshToken;
+      dio.options.baseUrl = kBaseUrl;
+      tokenType = "refresh";
+      log(dio.options.headers.toString());
+    }
+    if(_storedAccessToken == null){
+      log("_storedAccessToken is null");
+    } else {
+      log("<<<<<<<<<<old access token before login $_storedAccessToken");
+    }
 
     Response response;
     Map<String, dynamic> decodedJsonData;
@@ -67,7 +86,10 @@ class LoginPageFormBloc extends FormBloc<String, String> {
             data: jsonEncode(
                 {"email": emailField.value,
                  "password": passwordField.value,
-                  "rememberMe": true
+                  "rememberMe": true,
+                  "token_type": tokenType,
+                  "old_refresh_token": _refreshToken,
+                  "old_access_token": _storedAccessToken
                 }));
 
         if (response.statusCode == 200 ){
@@ -81,11 +103,17 @@ class LoginPageFormBloc extends FormBloc<String, String> {
           getIt = GetIt.instance;
           SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
 
+          prefs.setString("access_token", decodedJsonData['access_token']);
+          prefs.setString("refresh_token", decodedJsonData['refresh_token']);
+
           await sharedPreferenceManager.putAccessToken(decodedJsonData['access_token']).whenComplete(() => print(' access token stored'));
           await sharedPreferenceManager.putRefreshToken(decodedJsonData['refresh_token']).whenComplete(() => print('refresh token stored'));
 
           String tempAccessToken = sharedPreferenceManager.getString('access_token');
-          print('--------------------- $tempAccessToken');
+          log("<<<<<<<<<<new access token from shared pref after login $tempAccessToken");
+
+          String tempAccessToken1 = prefs.getString('access_token');
+          log("<<<<<<<<<<new access token from shared pref after login $tempAccessToken");
 
         } else if (response.statusCode == 205){
 
