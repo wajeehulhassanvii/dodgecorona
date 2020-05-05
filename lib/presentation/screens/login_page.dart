@@ -68,7 +68,6 @@ class LoginPageFormBloc extends FormBloc<String, String> {
                 {"email": emailField.value,
                  "password": passwordField.value,
                   "rememberMe": true
-//                "rememberMe": rememberMeBooleanField.value
                 }));
 
         if (response.statusCode == 200 ){
