@@ -303,10 +303,9 @@ class AccountSettingsPage extends StatelessWidget {
 
                           try {
                             dio.options.headers = {"Authorization": accessTokenBearer};
-                            deleteResponse = await dio.delete("/deleteuser", data: {
-                              "access_token": accessToken,
-                              "refresh_token": refreshToken
-                            });
+                            dio.options.headers['access_token'] =accessToken;
+                            dio.options.headers['refresh_token'] =refreshToken;
+                                deleteResponse = await dio.delete("/deleteuser");
                             print('done logout, now remove refresh logout');
 
                             if (deleteResponse.statusCode == 200) {

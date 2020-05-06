@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +15,6 @@ import 'package:trackcorona/utilities/loading_dialog.dart';
 import 'package:get/get.dart';
 
 class RegistrationPageFormBloc extends FormBloc<String, String> {
-  Dio dio = new Dio();
 
   @override
   void dispose() {
@@ -95,8 +95,14 @@ class RegistrationPageFormBloc extends FormBloc<String, String> {
   @override
   void onSubmitting() async {
 
+    Dio dio = new Dio();
     Response response;
     Map<String, dynamic> decodedJsonData;
+    log(emailField.value);
+    log(passwordField.value);
+    log(firstNameTextField.value);
+    log(lastNameTextField.value);
+    log(phoneNumberField.value);
 
     try {
       try {
@@ -105,9 +111,9 @@ class RegistrationPageFormBloc extends FormBloc<String, String> {
             data: jsonEncode({
               "email": emailField.value,
               "password": passwordField.value,
-              "firstName": firstNameTextField.value,
-              "lastName": lastNameTextField.value,
-              "phoneNumber": phoneNumberField.value
+              "first_name": firstNameTextField.value,
+              "last_name": lastNameTextField.value,
+              "phone_number": phoneNumberField.value
             }));
 
         try {
@@ -126,8 +132,8 @@ class RegistrationPageFormBloc extends FormBloc<String, String> {
       if (response.statusCode == 200) {
         emitSubmitting(progress: 1);
         emitSuccess(canSubmitAgain: true);
-      } else {
-        Get.snackbar('failed to login', 'email phone number taken',
+      } else if (response.statusCode == 400){
+        Get.snackbar('couldn\'t register account', response.data['message'],
             backgroundColor: Colors.grey[850],
             snackPosition: SnackPosition.BOTTOM,
             colorText: Colors.white70,
@@ -253,9 +259,9 @@ class RegistrationPage extends StatelessWidget {
                       }, // Success ends here
                       onFailure: (context, state) {
                         LoadingDialog.hide(context);
-
                         Get.snackbar(
-                            'failed to register', 'check info or connection',
+                            'could not register', 'try different phone number or email address\n'
+                            'also make sure your internet connection is working properly',
                             backgroundColor: Colors.grey[850],
                             snackPosition: SnackPosition.BOTTOM,
                             colorText: Colors.white70,

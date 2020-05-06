@@ -61,6 +61,12 @@ class LoginPageFormBloc extends FormBloc<String, String> {
   void onSubmitting() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _refreshToken = prefs.getString("refresh_token");
+    String _accessToken = prefs.getString("access_token");
+
+    // initialize getIt
+
+    log('this is refreshtoken $_refreshToken');
+    log('this is accessToken $_accessToken');
     String tokenType = "access";
     Dio dio = await ApiProvider().getDioHttpClient();
 
@@ -69,13 +75,14 @@ class LoginPageFormBloc extends FormBloc<String, String> {
       dio.clear();
 //      dio.options.headers['Authorization'] = "Bearer " +  _refreshToken;
       dio.options.baseUrl = kBaseUrl;
-      tokenType = "refresh";
-      log(dio.options.headers.toString());
+      dio.options.headers['refresh_token']= _refreshToken;
+      log("_refreshToken is $_refreshToken");
     }
-    if(_storedAccessToken == null){
-      log("_storedAccessToken is null");
+    if(_storedAccessToken != null){
+      dio.options.headers['access_token']= _accessToken;
+      log("_accessToken is $_accessToken");
     } else {
-      log("<<<<<<<<<<old access token before login $_storedAccessToken");
+
     }
 
     Response response;
@@ -87,9 +94,6 @@ class LoginPageFormBloc extends FormBloc<String, String> {
                 {"email": emailField.value,
                  "password": passwordField.value,
                   "rememberMe": true,
-                  "token_type": tokenType,
-                  "old_refresh_token": _refreshToken,
-                  "old_access_token": _storedAccessToken
                 }));
 
         if (response.statusCode == 200 ){
@@ -99,20 +103,20 @@ class LoginPageFormBloc extends FormBloc<String, String> {
 
           PushNotificationService.saveDeviceToken();
 
-          // initialize getIt
-          getIt = GetIt.instance;
-          SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
 
-          prefs.setString("access_token", decodedJsonData['access_token']);
-          prefs.setString("refresh_token", decodedJsonData['refresh_token']);
+          prefs.setString("access_token", decodedJsonData['access_token']).whenComplete(() => log(' access token stored'));
+          prefs.setString("refresh_token", decodedJsonData['refresh_token']).whenComplete(() => log('refresh token stored'));
 
-          await sharedPreferenceManager.putAccessToken(decodedJsonData['access_token']).whenComplete(() => print(' access token stored'));
-          await sharedPreferenceManager.putRefreshToken(decodedJsonData['refresh_token']).whenComplete(() => print('refresh token stored'));
+//          GetIt getIt;
+//          SharedPreferencesManager sharedPreferenceManager= getIt<SharedPreferencesManager>();
+//
+//          await sharedPreferenceManager.putAccessToken(decodedJsonData['access_token']).whenComplete(() => print(' access token stored'));
+//          await sharedPreferenceManager.putRefreshToken(decodedJsonData['refresh_token']).whenComplete(() => print('refresh token stored'));
+//
+          String tempRefreshToken = prefs.getString('refresh_token');
+          log("<<<<<<<<<<new refresh token from shared pref after login $tempRefreshToken");
 
-          String tempAccessToken = sharedPreferenceManager.getString('access_token');
-          log("<<<<<<<<<<new access token from shared pref after login $tempAccessToken");
-
-          String tempAccessToken1 = prefs.getString('access_token');
+          String tempAccessToken = prefs.getString('access_token');
           log("<<<<<<<<<<new access token from shared pref after login $tempAccessToken");
 
         } else if (response.statusCode == 205){
