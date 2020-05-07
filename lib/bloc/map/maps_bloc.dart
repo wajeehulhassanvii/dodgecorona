@@ -109,8 +109,6 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
         var varlistOfMyMarkerElements =
             decodedJsonData['list_of_user_location_and_health'];
 
-        print('fetched the markerelements');
-
         for (var e in varlistOfMyMarkerElements) {
           listOfMyMarkerElements.add(MyMarkerElements.fromJson(e));
           print(listOfMyMarkerElements.toString());
@@ -119,6 +117,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
         print('length ${listOfMyMarkerElements.length}');
 
         for (MyMarkerElements e in listOfMyMarkerElements) {
+
           if (e.getLatLng() == userLocation) {
             listOfUserMarkersWithinGivenDiameter.add(Marker(
               anchorPos: AnchorPos.align(AnchorAlign.center),
@@ -154,6 +153,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
               ),
             ));
           }
+
         } // for loop ends here
 
         print(
