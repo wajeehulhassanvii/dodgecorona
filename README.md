@@ -1,3 +1,3 @@
 # dodgecorona
 
-An application that allows us to protect our family and loved ones by tracking Corona infected person.
+A native cross platform application using Flutter which help us avoid potential corona infected person, allowing us to save lives of our loved ones. ABANDONED STARTUP
